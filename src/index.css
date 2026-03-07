@@ -1,0 +1,158 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  font-family:
+    "SF Pro Display",
+    "SF Pro Text",
+    "Apple SD Gothic Neo",
+    "Pretendard",
+    "Segoe UI",
+    sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --color-bg-app: #071117;
+  --color-bg-surface: #0d1a21;
+  --color-bg-elevated: #12232c;
+  --color-border-subtle: rgba(152, 178, 191, 0.12);
+  --color-border-strong: rgba(152, 178, 191, 0.24);
+  --color-text-primary: #edf6f8;
+  --color-text-secondary: #b0c3cb;
+  --color-text-muted: #708892;
+  --color-accent: #52c7de;
+  --color-accent-soft: rgba(82, 199, 222, 0.14);
+  --color-profit: #3ed598;
+  --color-loss: #ff6b7a;
+  --color-warning: #f6c760;
+  --color-info: #78aaf8;
+  --color-focus-ring: rgba(82, 199, 222, 0.34);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  --radius-panel: 24px;
+  --radius-control: 16px;
+  --radius-pill: 999px;
+
+  --shadow-surface: 0 18px 48px rgba(0, 0, 0, 0.28);
+  --shadow-modal: 0 28px 80px rgba(0, 0, 0, 0.45);
+
+  --container-main: 72rem;
+  --container-wide: 84rem;
+
+  --transition-fast: 160ms ease;
+  --transition-base: 240ms ease;
+}
+
+@theme inline {
+  --font-sans:
+    "SF Pro Display",
+    "SF Pro Text",
+    "Apple SD Gothic Neo",
+    "Pretendard",
+    "Segoe UI",
+    sans-serif;
+  --color-app: var(--color-bg-app);
+  --color-surface: var(--color-bg-surface);
+  --color-elevated: var(--color-bg-elevated);
+  --color-border-subtle: var(--color-border-subtle);
+  --color-border-strong: var(--color-border-strong);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+  --color-accent: var(--color-accent);
+  --color-accent-soft: var(--color-accent-soft);
+  --color-profit: var(--color-profit);
+  --color-loss: var(--color-loss);
+  --color-warning: var(--color-warning);
+  --color-info: var(--color-info);
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    min-width: 320px;
+    background:
+      radial-gradient(circle at top, rgba(82, 199, 222, 0.08), transparent 28%),
+      linear-gradient(180deg, #09151c 0%, #071117 100%);
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+    background: transparent;
+    color: var(--color-text-primary);
+  }
+
+  body.modal-open {
+    overflow: hidden;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button,
+  input {
+    font: inherit;
+  }
+
+  ::selection {
+    background: rgba(82, 199, 222, 0.26);
+    color: var(--color-text-primary);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  .panel-surface {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent),
+      var(--color-bg-surface);
+    border: 1px solid var(--color-border-subtle);
+    box-shadow: var(--shadow-surface);
+  }
+
+  .panel-elevated {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent),
+      var(--color-bg-elevated);
+    border: 1px solid var(--color-border-strong);
+    box-shadow: var(--shadow-modal);
+  }
+
+  .text-data {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  .scrollbar-hidden {
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+}

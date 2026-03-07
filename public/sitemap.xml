@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://trading-helper.vercel.app/avg-price</loc>
+  </url>
+  <url>
+    <loc>https://trading-helper.vercel.app/dca</loc>
+  </url>
+  <url>
+    <loc>https://trading-helper.vercel.app/position-sizing</loc>
+  </url>
+  <url>
+    <loc>https://trading-helper.vercel.app/simulator</loc>
+  </url>
+  <url>
+    <loc>https://trading-helper.vercel.app/expectancy</loc>
+  </url>
+</urlset>
