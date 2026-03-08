@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://trading-helper.vercel.app/sitemap.xml
+Sitemap: https://tradinghelpers.com/sitemap.xml

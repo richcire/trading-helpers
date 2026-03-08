@@ -16,6 +16,9 @@ interface AppRoute extends RouteMeta {
   component: ComponentType;
 }
 
+const SITE_URL = "https://tradinghelpers.com";
+const OG_IMAGE_URL = `${SITE_URL}/og-image.png`;
+
 const ROUTE_BLUEPRINT = [
   { id: "avgCalc", path: "/avg-price", metaKey: "avg", component: AvgCalcPage },
   { id: "dca", path: "/dca", metaKey: "dca", component: DcaPage },
@@ -39,13 +42,13 @@ const ROUTE_BLUEPRINT = [
   },
 ] as const;
 
-function ensureMetaTag(name: string) {
+function ensureMetaTag(attr: "name" | "property", value: string) {
   let tag = document.head.querySelector<HTMLMetaElement>(
-    `meta[name="${name}"]`,
+    `meta[${attr}="${value}"]`,
   );
   if (!tag) {
     tag = document.createElement("meta");
-    tag.setAttribute("name", name);
+    tag.setAttribute(attr, value);
     document.head.appendChild(tag);
   }
   return tag;
@@ -96,14 +99,33 @@ export default function App() {
   useEffect(() => {
     document.title = currentRoute.title;
 
-    const descriptionTag = ensureMetaTag("description");
+    const descriptionTag = ensureMetaTag("name", "description");
     descriptionTag.setAttribute("content", currentRoute.description);
 
+    const canonicalUrl = `${SITE_URL}${currentRoute.canonicalPath}`;
     const canonicalLink = ensureCanonicalLink();
-    canonicalLink.setAttribute(
-      "href",
-      `${window.location.origin}${currentRoute.canonicalPath}`,
-    );
+    canonicalLink.setAttribute("href", canonicalUrl);
+
+    const ogUrlTag = ensureMetaTag("property", "og:url");
+    ogUrlTag.setAttribute("content", canonicalUrl);
+
+    const ogTitleTag = ensureMetaTag("property", "og:title");
+    ogTitleTag.setAttribute("content", currentRoute.title);
+
+    const ogDescriptionTag = ensureMetaTag("property", "og:description");
+    ogDescriptionTag.setAttribute("content", currentRoute.description);
+
+    const ogImageTag = ensureMetaTag("property", "og:image");
+    ogImageTag.setAttribute("content", OG_IMAGE_URL);
+
+    const twitterTitleTag = ensureMetaTag("name", "twitter:title");
+    twitterTitleTag.setAttribute("content", currentRoute.title);
+
+    const twitterDescriptionTag = ensureMetaTag("name", "twitter:description");
+    twitterDescriptionTag.setAttribute("content", currentRoute.description);
+
+    const twitterImageTag = ensureMetaTag("name", "twitter:image");
+    twitterImageTag.setAttribute("content", OG_IMAGE_URL);
   }, [currentRoute]);
 
   return (
