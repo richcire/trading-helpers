@@ -6,6 +6,7 @@ import { TabNav } from "./components/layout/TabNav";
 import { SettingsModal } from "./components/settings/SettingsModal";
 import { AvgCalcPage } from "./features/avgCalc/AvgCalcPage";
 import { DcaPage } from "./features/dca/DcaPage";
+import { DocsPage } from "./features/docs/DocsPage";
 import { ExpectancyPage } from "./features/expectancy/ExpectancyPage";
 import { SimulatorPage } from "./features/simulator/SimulatorPage";
 import { SizingPage } from "./features/sizing/SizingPage";
@@ -14,31 +15,54 @@ import type { RouteMeta } from "./types";
 
 interface AppRoute extends RouteMeta {
   component: ComponentType;
+  showInTabs: boolean;
 }
 
 const SITE_URL = "https://tradinghelpers.com";
 const OG_IMAGE_URL = `${SITE_URL}/og-image.png`;
 
 const ROUTE_BLUEPRINT = [
-  { id: "avgCalc", path: "/avg-price", metaKey: "avg", component: AvgCalcPage },
-  { id: "dca", path: "/dca", metaKey: "dca", component: DcaPage },
+  {
+    id: "avgCalc",
+    path: "/avg-price",
+    metaKey: "avg",
+    component: AvgCalcPage,
+    showInTabs: true,
+  },
+  {
+    id: "dca",
+    path: "/dca",
+    metaKey: "dca",
+    component: DcaPage,
+    showInTabs: true,
+  },
   {
     id: "sizing",
     path: "/position-sizing",
     metaKey: "sizing",
     component: SizingPage,
+    showInTabs: true,
   },
   {
     id: "simulator",
     path: "/simulator",
     metaKey: "sim",
     component: SimulatorPage,
+    showInTabs: true,
   },
   {
     id: "expectancy",
     path: "/expectancy",
     metaKey: "exp",
     component: ExpectancyPage,
+    showInTabs: true,
+  },
+  {
+    id: "docs",
+    path: "/docs",
+    metaKey: "docs",
+    component: DocsPage,
+    showInTabs: false,
   },
 ] as const;
 
@@ -71,7 +95,7 @@ export default function App() {
   const location = useLocation();
   const { t } = useI18n();
 
-  const featureRoutes = useMemo<readonly AppRoute[]>(() => {
+  const appRoutes = useMemo<readonly AppRoute[]>(() => {
     return ROUTE_BLUEPRINT.map((route) => {
       const prefix = `app.route.${route.metaKey}`;
 
@@ -85,16 +109,21 @@ export default function App() {
         introTitle: t(`${prefix}.introTitle`),
         introDescription: t(`${prefix}.introDescription`),
         component: route.component,
+        showInTabs: route.showInTabs,
       };
     });
   }, [t]);
 
   const currentRoute = useMemo(() => {
     return (
-      featureRoutes.find((route) => route.path === location.pathname) ??
-      featureRoutes[0]
+      appRoutes.find((route) => route.path === location.pathname) ??
+      appRoutes[0]
     );
-  }, [featureRoutes, location.pathname]);
+  }, [appRoutes, location.pathname]);
+
+  const docsRoute = useMemo(() => {
+    return appRoutes.find((route) => route.id === "docs");
+  }, [appRoutes]);
 
   useEffect(() => {
     document.title = currentRoute.title;
@@ -132,24 +161,27 @@ export default function App() {
     <div className="min-h-screen bg-transparent text-[color:var(--color-text-primary)]">
       <div className="sticky top-0 z-30 border-b border-[color:var(--color-border-subtle)] bg-[rgba(7,17,23,0.82)] backdrop-blur-xl supports-[backdrop-filter]:bg-[rgba(7,17,23,0.74)]">
         <div className="mx-auto w-full max-w-[var(--container-wide)]">
-          <Header onSettingsClick={() => setSettingsOpen(true)} />
+          <Header
+            docsLabel={docsRoute?.label ?? "Docs"}
+            docsPath={docsRoute?.path ?? "/docs"}
+            onSettingsClick={() => setSettingsOpen(true)}
+          />
           <div className="px-4 sm:px-6">
             <div className="h-px bg-gradient-to-r from-transparent via-[color:var(--color-border-strong)] to-transparent" />
           </div>
           <TabNav
-            tabs={featureRoutes.map((route) => ({
-              id: route.id,
-              label: route.label,
-              to: route.path,
-            }))}
+            tabs={appRoutes
+              .filter((route) => route.showInTabs)
+              .map((route) => ({
+                id: route.id,
+                label: route.label,
+                to: route.path,
+              }))}
           />
         </div>
       </div>
       <main className="mx-auto w-full max-w-[var(--container-wide)] px-4 py-6 sm:px-6 sm:py-8">
         <section className="mb-6 rounded-[var(--radius-card)] border border-white/8 bg-[color:var(--surface-base)] px-5 py-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--color-text-muted)]">
-            {t("app.searchIntent")}
-          </p>
           <h2 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[color:var(--color-text-primary)]">
             {currentRoute.introTitle}
           </h2>
@@ -159,7 +191,7 @@ export default function App() {
         </section>
         <Routes>
           <Route element={<Navigate replace to="/avg-price" />} path="/" />
-          {featureRoutes.map((route) => (
+          {appRoutes.map((route) => (
             <Route
               element={<route.component />}
               key={route.id}
