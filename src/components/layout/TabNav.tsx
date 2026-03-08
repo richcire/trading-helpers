@@ -13,8 +13,8 @@ interface Props<T extends string> {
 
 export function TabNav<T extends string>({ tabs }: Props<T>) {
   return (
-    <div className="sticky top-[97px] z-20 border-b border-white/8 bg-[rgba(7,17,23,0.68)] backdrop-blur-xl sm:top-[105px]">
-      <div className="scrollbar-hidden mx-auto flex max-w-[var(--container-wide)] gap-2 overflow-x-auto px-4 py-3 sm:px-6">
+    <nav className="px-4 pb-3 pt-2 sm:px-6">
+      <div className="scrollbar-hidden flex gap-2 overflow-x-auto">
         {tabs.map((tab) => {
           return (
             <NavLink
@@ -44,6 +44,6 @@ export function TabNav<T extends string>({ tabs }: Props<T>) {
           )
         })}
       </div>
-    </div>
+    </nav>
   )
 }

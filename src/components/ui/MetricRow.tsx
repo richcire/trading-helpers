@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import type { ReactNode } from 'react'
 
+import { useI18n } from '../../i18n'
 import type { CalculationTooltipPayload, Tone } from '../../types'
 import { CalculationTooltipPanel } from './CalculationTooltip'
 import { useCalculationTooltipController } from './useCalculationTooltipController'
@@ -23,6 +24,7 @@ const toneClasses: Record<Tone, string> = {
 }
 
 export function MetricRow({ className, hint, label, tone = 'neutral', tooltip, value }: Props) {
+  const { t } = useI18n()
   const { close, isOpen, open, panelId, rootRef, toggle } = useCalculationTooltipController()
 
   return (
@@ -45,7 +47,7 @@ export function MetricRow({ className, hint, label, tone = 'neutral', tooltip, v
             <button
               aria-describedby={isOpen ? panelId : undefined}
               aria-expanded={isOpen}
-              aria-label={`${label} 계산식 보기`}
+              aria-label={t('tooltip.view', { label })}
               className="inline-flex size-5 cursor-pointer items-center justify-center rounded-full border border-[color:var(--color-border-subtle)] bg-white/6 text-[11px] font-semibold text-[color:var(--color-text-secondary)] transition hover:border-[color:var(--color-border-strong)] hover:text-[color:var(--color-text-primary)] focus-visible:outline-none"
               onClick={(event) => {
                 event.preventDefault()

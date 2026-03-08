@@ -22,6 +22,7 @@ import { persist } from 'zustand/middleware'
 import type { Settings } from '../types'
 
 const DEFAULT_SETTINGS: Settings = {
+  language: 'en',
   currency: 'USD',
   leverage: 1,
   feeEntryPct: 0,

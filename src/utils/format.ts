@@ -1,14 +1,19 @@
+import { getActiveLocale } from '../i18n/language'
 import type { CurrencyCode } from '../types'
+
+function getNumberFormatter(decimals: number) {
+  return new Intl.NumberFormat(getActiveLocale(), {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  })
+}
 
 export function formatNumber(value: number, decimals = 2): string {
   if (!Number.isFinite(value)) {
     return '-'
   }
 
-  return new Intl.NumberFormat('ko-KR', {
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals,
-  }).format(value)
+  return getNumberFormatter(decimals).format(value)
 }
 
 export function formatPnl(value: number, decimals = 2): string {

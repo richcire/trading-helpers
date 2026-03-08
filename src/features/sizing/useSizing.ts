@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 
 import { calcPnl, calcSizing } from '../../calc'
+import { useI18n } from '../../i18n'
 import { useSettingsStore } from '../../store/useSettingsStore'
 import type { Direction, PnlResult, RiskMode } from '../../types'
 import { parsePositiveNumber, validateSizingDirection } from '../../utils/validate'
@@ -35,6 +36,7 @@ interface UseSizingReturn {
 
 export function useSizing(): UseSizingReturn {
   const { settings } = useSettingsStore()
+  const { t } = useI18n()
   const [direction, setDirection] = useState<Direction>('LONG')
   const [accountEquity, setAccountEquity] = useState('')
   const [riskMode, setRiskMode] = useState<RiskMode>('pct')
@@ -42,7 +44,7 @@ export function useSizing(): UseSizingReturn {
   const [entryPrice, setEntryPrice] = useState('')
   const [stopPrice, setStopPrice] = useState('')
 
-  const error = useMemo(() => {
+  const error = useMemo<string | null>(() => {
     const entry = parsePositiveNumber(entryPrice)
     const stop = parsePositiveNumber(stopPrice)
 
@@ -50,8 +52,9 @@ export function useSizing(): UseSizingReturn {
       return null
     }
 
-    return validateSizingDirection(direction, entry, stop)
-  }, [direction, entryPrice, stopPrice])
+    const code = validateSizingDirection(direction, entry, stop)
+    return code ? t(code) : null
+  }, [direction, entryPrice, stopPrice, t])
 
   const result = useMemo<SizingResult | null>(() => {
     const equity = parsePositiveNumber(accountEquity)

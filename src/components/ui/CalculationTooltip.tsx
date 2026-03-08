@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import { useMemo, useState, type ReactNode } from 'react'
 
+import { useI18n } from '../../i18n'
 import type { CalculationTooltipPayload, Tone } from '../../types'
 import { TooltipGroupContext, useCalculationTooltipController } from './useCalculationTooltipController'
 
@@ -26,6 +27,8 @@ interface TooltipPanelProps {
 }
 
 export function CalculationTooltipPanel({ align = 'right', tone = 'neutral', tooltip }: TooltipPanelProps) {
+  const { t } = useI18n()
+
   return (
     <div
       className={clsx(
@@ -37,15 +40,15 @@ export function CalculationTooltipPanel({ align = 'right', tone = 'neutral', too
       <p className={clsx('text-xs font-semibold uppercase tracking-[0.12em]', toneClasses[tone])}>{tooltip.title}</p>
       <div className="mt-2 space-y-1.5 text-xs leading-5 text-[color:var(--color-text-secondary)]">
         <p>
-          <span className="mr-1 text-[color:var(--color-text-muted)]">공식</span>
+          <span className="mr-1 text-[color:var(--color-text-muted)]">{t('common.formula')}</span>
           <span className="text-data">{tooltip.formula}</span>
         </p>
         <p>
-          <span className="mr-1 text-[color:var(--color-text-muted)]">대입</span>
+          <span className="mr-1 text-[color:var(--color-text-muted)]">{t('common.substitution')}</span>
           <span className="text-data">{tooltip.substitution}</span>
         </p>
         <p>
-          <span className="mr-1 text-[color:var(--color-text-muted)]">결과</span>
+          <span className="mr-1 text-[color:var(--color-text-muted)]">{t('common.result')}</span>
           <span className={clsx('text-data font-semibold', toneClasses[tone])}>{tooltip.result}</span>
         </p>
       </div>
@@ -64,6 +67,7 @@ interface ValueTooltipProps {
 
 export function ValueWithTooltip({ align = 'right', children, className, tone = 'neutral', tooltip }: ValueTooltipProps) {
   const { close, isOpen, open, panelId, rootRef, toggle } = useCalculationTooltipController()
+  const { t } = useI18n()
 
   return (
     <div
@@ -84,7 +88,7 @@ export function ValueWithTooltip({ align = 'right', children, className, tone = 
       <button
         aria-describedby={isOpen ? panelId : undefined}
         aria-expanded={isOpen}
-        aria-label={`${tooltip.title} 계산식 보기`}
+        aria-label={t('tooltip.view', { label: tooltip.title })}
         className="inline-flex size-5 cursor-pointer items-center justify-center rounded-full border border-[color:var(--color-border-subtle)] bg-white/6 text-[11px] font-semibold text-[color:var(--color-text-secondary)] transition hover:border-[color:var(--color-border-strong)] hover:text-[color:var(--color-text-primary)] focus-visible:outline-none"
         onClick={(event) => {
           event.preventDefault()

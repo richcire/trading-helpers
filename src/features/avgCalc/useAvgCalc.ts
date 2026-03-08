@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 
 import { calcAvgPrice, calcPnl, calcStopTakeByAmount, calcStopTakeByPct } from '../../calc'
+import { useI18n } from '../../i18n'
 import { useSettingsStore } from '../../store/useSettingsStore'
 import type { Direction, EntryRow, PnlResult, StopTakeConfig } from '../../types'
 import { parseNonNegativeNumber, parsePositiveNumber } from '../../utils/validate'
@@ -54,6 +55,7 @@ const INITIAL_TAKE: StopTakeConfig = { mode: 'pct', value: '5' }
 
 export function useAvgCalc(): UseAvgCalcReturn {
   const { settings } = useSettingsStore()
+  const { t } = useI18n()
   const [direction, setDirection] = useState<Direction>('LONG')
   const [entries, setEntries] = useState<EntryRow[]>([createEntry()])
   const [stopConfig, setStopConfigState] = useState<StopTakeConfig>(INITIAL_STOP)
@@ -69,20 +71,20 @@ export function useAvgCalc(): UseAvgCalcReturn {
       const amount = parsePositiveNumber(entry.amount)
 
       if (entry.price.trim() !== '' && price === null) {
-        errors[entry.id] = { ...errors[entry.id], price: '가격은 0보다 커야 합니다' }
+        errors[entry.id] = { ...errors[entry.id], price: t('validation.avg.price') }
       }
 
       if (entry.mode === 'qty' && entry.qty.trim() !== '' && qty === null) {
-        errors[entry.id] = { ...errors[entry.id], qty: '수량은 0보다 커야 합니다' }
+        errors[entry.id] = { ...errors[entry.id], qty: t('validation.avg.qty') }
       }
 
       if (entry.mode === 'amount' && entry.amount.trim() !== '' && amount === null) {
-        errors[entry.id] = { ...errors[entry.id], amount: '금액은 0보다 커야 합니다' }
+        errors[entry.id] = { ...errors[entry.id], amount: t('validation.avg.amount') }
       }
     }
 
     return errors
-  }, [entries])
+  }, [entries, t])
 
   const stopError = useMemo(() => {
     if (stopConfig.value.trim() === '') {
@@ -93,15 +95,15 @@ export function useAvgCalc(): UseAvgCalcReturn {
       stopConfig.mode === 'pct' ? parseNonNegativeNumber(stopConfig.value) : parsePositiveNumber(stopConfig.value)
 
     if (value === null) {
-      return stopConfig.mode === 'pct' ? '손절 퍼센트는 0 이상이어야 합니다' : '손절 금액은 0보다 커야 합니다'
+      return stopConfig.mode === 'pct' ? t('validation.avg.stopPct') : t('validation.avg.stopAmount')
     }
 
     if (stopConfig.mode === 'pct' && value >= 100) {
-      return '손절 퍼센트는 100% 미만이어야 합니다'
+      return t('validation.avg.stopPctMax')
     }
 
     return null
-  }, [stopConfig])
+  }, [stopConfig, t])
 
   const takeError = useMemo(() => {
     if (takeConfig.value.trim() === '') {
@@ -112,19 +114,19 @@ export function useAvgCalc(): UseAvgCalcReturn {
       takeConfig.mode === 'pct' ? parseNonNegativeNumber(takeConfig.value) : parsePositiveNumber(takeConfig.value)
 
     if (value === null) {
-      return takeConfig.mode === 'pct' ? '익절 퍼센트는 0 이상이어야 합니다' : '익절 금액은 0보다 커야 합니다'
+      return takeConfig.mode === 'pct' ? t('validation.avg.takePct') : t('validation.avg.takeAmount')
     }
 
     return null
-  }, [takeConfig])
+  }, [takeConfig, t])
 
   const currentPriceError = useMemo(() => {
     if (currentPrice.trim() === '') {
       return null
     }
 
-    return parsePositiveNumber(currentPrice) === null ? '현재가는 0보다 커야 합니다' : null
-  }, [currentPrice])
+    return parsePositiveNumber(currentPrice) === null ? t('validation.avg.current') : null
+  }, [currentPrice, t])
 
   const result = useMemo<AvgCalcResult | null>(() => {
     if (stopError || takeError || currentPriceError) {

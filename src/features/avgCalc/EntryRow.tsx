@@ -1,3 +1,4 @@
+import { useI18n } from '../../i18n'
 import { IconButton } from '../../components/ui/IconButton'
 import { InputRow } from '../../components/ui/InputRow'
 import { SegmentedControl } from '../../components/ui/SegmentedControl'
@@ -17,23 +18,25 @@ interface Props {
 }
 
 export function EntryRow({ currencyUnit, errors, onChange, onRemove, row, showRemove }: Props) {
+  const { t } = useI18n()
+
   return (
     <div className="rounded-[var(--radius-control)] border border-[color:var(--color-border-subtle)] bg-black/10 p-4">
       <div className="mb-4 flex items-center justify-between gap-3">
-        <p className="text-sm font-semibold tracking-[-0.02em] text-[color:var(--color-text-primary)]">진입 행</p>
+        <p className="text-sm font-semibold tracking-[-0.02em] text-[color:var(--color-text-primary)]">{t('avg.entryRow')}</p>
         <div className="flex items-center gap-2">
           <SegmentedControl
             className="min-w-[180px]"
             onChange={(value) => onChange(row.id, 'mode', value)}
             options={[
-              { label: '수량', value: 'qty' },
-              { label: '금액', value: 'amount' },
+              { label: t('avg.mode.qty'), value: 'qty' },
+              { label: t('avg.mode.amount'), value: 'amount' },
             ]}
             tone="accent"
             value={row.mode}
           />
           {showRemove && (
-            <IconButton label="진입 행 삭제" onClick={() => onRemove(row.id)}>
+            <IconButton label={t('avg.removeEntry')} onClick={() => onRemove(row.id)}>
               <svg aria-hidden="true" className="size-5" fill="none" viewBox="0 0 24 24">
                 <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5" />
               </svg>
@@ -46,7 +49,7 @@ export function EntryRow({ currencyUnit, errors, onChange, onRemove, row, showRe
         <InputRow
           error={errors?.price}
           inputMode="decimal"
-          label="가격"
+          label={t('avg.input.price')}
           onChange={(value) => onChange(row.id, 'price', value)}
           placeholder="0.00"
           tone="accent"
@@ -58,7 +61,7 @@ export function EntryRow({ currencyUnit, errors, onChange, onRemove, row, showRe
           <InputRow
             error={errors?.qty}
             inputMode="decimal"
-            label="수량"
+            label={t('avg.input.qty')}
             onChange={(value) => onChange(row.id, 'qty', value)}
             placeholder="0.00"
             tone="accent"
@@ -69,7 +72,7 @@ export function EntryRow({ currencyUnit, errors, onChange, onRemove, row, showRe
           <InputRow
             error={errors?.amount}
             inputMode="decimal"
-            label="진입 금액"
+            label={t('avg.input.entryAmount')}
             onChange={(value) => onChange(row.id, 'amount', value)}
             placeholder="0.00"
             tone="accent"

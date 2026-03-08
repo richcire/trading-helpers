@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import { useId } from 'react'
 
+import { useI18n } from '../../i18n'
 import type { FieldState, Tone } from '../../types'
 import { FieldError } from './FieldError'
 import { FieldHint } from './FieldHint'
@@ -48,6 +49,7 @@ export function InputRow({
   value,
 }: Props) {
   const inputId = useId()
+  const { t } = useI18n()
   const state: FieldState = disabled ? 'disabled' : error ? 'error' : 'default'
   const isNumberInput = type === 'number'
   const stepValue = typeof step === 'number' && Number.isFinite(step) && step > 0 ? step : 1
@@ -103,7 +105,7 @@ export function InputRow({
         {isNumberInput && !disabled && (
           <div className="ml-1 flex shrink-0 items-center gap-1">
             <button
-              aria-label={`${label} 감소`}
+              aria-label={t('input.decrease', { label })}
               className="h-7 w-7 cursor-pointer rounded-[10px] border border-[color:var(--color-border-subtle)] bg-black/20 text-xs font-semibold text-[color:var(--color-text-secondary)] transition hover:border-[color:var(--color-border-strong)] hover:text-[color:var(--color-text-primary)] active:scale-95"
               onClick={() => handleStep(-1)}
               type="button"
@@ -111,7 +113,7 @@ export function InputRow({
               -
             </button>
             <button
-              aria-label={`${label} 증가`}
+              aria-label={t('input.increase', { label })}
               className="h-7 w-7 cursor-pointer rounded-[10px] border border-[color:var(--color-border-subtle)] bg-black/20 text-xs font-semibold text-[color:var(--color-text-secondary)] transition hover:border-[color:var(--color-border-strong)] hover:text-[color:var(--color-text-primary)] active:scale-95"
               onClick={() => handleStep(1)}
               type="button"

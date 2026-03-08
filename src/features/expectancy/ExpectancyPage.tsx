@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 import { useSettingsStore } from '../../store/useSettingsStore'
+import { useI18n } from '../../i18n'
 import {
   CartesianGrid,
   Line,
@@ -33,6 +34,7 @@ interface CurveTooltipProps {
 
 export function ExpectancyPage() {
   const { settings } = useSettingsStore()
+  const { t } = useI18n()
   const currencyUnit = formatCurrencyUnit(settings.currency)
   const {
     RR,
@@ -61,7 +63,7 @@ export function ExpectancyPage() {
     const loss = Number.parseFloat(avgLoss)
 
     const expectancy: CalculationTooltipPayload = {
-      title: '기대값',
+      title: t('exp.metric.expectancy'),
       formula: mode === 'rr' ? 'E = p×RR - (1-p)' : 'E = p×avgWin - (1-p)×avgLoss',
       substitution: mode === 'rr'
         ? `p=${formatNumber(winRate / 100, 4)}, RR=${formatNumber(rr, 4)}`
@@ -71,23 +73,29 @@ export function ExpectancyPage() {
     }
 
     const breakEven: CalculationTooltipPayload = {
-      title: '손익분기 승률',
+      title: t('exp.metric.breakEven'),
       formula: mode === 'rr' ? 'BE = 1 / (1 + RR)' : 'BE = avgLoss / (avgWin + avgLoss)',
       substitution: mode === 'rr' ? `RR=${formatNumber(rr, 4)}` : `avgLoss=${formatNumber(loss, 2)}, avgWin=${formatNumber(win, 2)}`,
       result: `${formatPct(result.breakEvenWinRate * 100, 2)}`,
       tone: 'warning',
     }
 
+    const judgementResult = result.expectancy > 0
+      ? t('exp.judgement.positive')
+      : result.expectancy < 0
+        ? t('exp.judgement.negative')
+        : t('exp.judgement.neutral')
+
     const judgement: CalculationTooltipPayload = {
-      title: '전략 판정',
-      formula: 'expectancy > 0 = 양의 기대값 / < 0 = 음의 기대값 / = 0 = 중립',
+      title: t('exp.metric.judgement'),
+      formula: t('exp.judgement.formula'),
       substitution: `expectancy=${formatNumber(result.expectancy, 4)}`,
-      result: result.expectancy > 0 ? '양의 기대값' : result.expectancy < 0 ? '음의 기대값' : '중립',
+      result: judgementResult,
       tone: result.expectancy > 0 ? 'profit' : result.expectancy < 0 ? 'loss' : 'warning',
     }
 
     return { expectancy, breakEven, judgement }
-  }, [RR, avgLoss, avgWin, mode, result, winRatePct])
+  }, [RR, avgLoss, avgWin, mode, result, t, winRatePct])
 
   const renderCurveTooltip = ({ active, payload }: CurveTooltipProps) => {
     if (!active || !payload || payload.length === 0) {
@@ -98,18 +106,18 @@ export function ExpectancyPage() {
 
     return (
       <div className="w-[min(90vw,22rem)] rounded-[var(--radius-control)] border border-[color:var(--color-border-strong)] panel-elevated p-3">
-        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[color:var(--color-accent)]">손익분기 승률 곡선</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[color:var(--color-accent)]">{t('exp.curve.tooltipTitle')}</p>
         <div className="mt-2 space-y-1 text-xs text-[color:var(--color-text-secondary)]">
           <p>
-            <span className="mr-1 text-[color:var(--color-text-muted)]">공식</span>
+            <span className="mr-1 text-[color:var(--color-text-muted)]">{t('common.formula')}</span>
             <span className="text-data">breakEvenWinRate = 1 / (1 + RR)</span>
           </p>
           <p>
-            <span className="mr-1 text-[color:var(--color-text-muted)]">대입</span>
+            <span className="mr-1 text-[color:var(--color-text-muted)]">{t('common.substitution')}</span>
             <span className="text-data">1 / (1 + {formatNumber(point.RR, 2)})</span>
           </p>
           <p>
-            <span className="mr-1 text-[color:var(--color-text-muted)]">결과</span>
+            <span className="mr-1 text-[color:var(--color-text-muted)]">{t('common.result')}</span>
             <span className="text-data font-semibold text-[color:var(--color-text-primary)]">{formatPct(point.breakEvenWinRate * 100, 2)}</span>
           </p>
         </div>
@@ -123,58 +131,58 @@ export function ExpectancyPage() {
         <SectionCard
           actions={
             <ActionButton onClick={reset} tone="warning" variant="outline">
-              현재 입력 초기화
+              {t('common.resetInputs')}
             </ActionButton>
           }
-          description="승률과 손익비로 전략의 장기 기대값과 손익분기 승률을 계산합니다."
-          eyebrow="Expectancy"
-          title="기대값 분석"
+          description={t('exp.card.description')}
+          eyebrow={t('common.section.expectancy')}
+          title={t('exp.card.title')}
         >
           <div className="space-y-4">
             <SegmentedControl
               onChange={setMode}
               options={[
-                { label: 'RR 모드', value: 'rr' },
-                { label: '금액 모드', value: 'amount' },
+                { label: t('exp.mode.rr'), value: 'rr' },
+                { label: t('exp.mode.amount'), value: 'amount' },
               ]}
               value={mode}
             />
-            <InputRow inputMode="decimal" label="승률" onChange={setWinRatePct} tone="accent" type="number" unit="%" value={winRatePct} />
+            <InputRow inputMode="decimal" label={t('exp.input.winRate')} onChange={setWinRatePct} tone="accent" type="number" unit="%" value={winRatePct} />
             {mode === 'rr' ? (
-              <InputRow inputMode="decimal" label="손익비 RR" onChange={setRR} tone="accent" type="number" value={RR} />
+              <InputRow inputMode="decimal" label={t('exp.input.rr')} onChange={setRR} tone="accent" type="number" value={RR} />
             ) : (
               <div className="grid gap-4 md:grid-cols-2">
-                <InputRow inputMode="decimal" label="평균 수익" onChange={setAvgWin} tone="profit" type="number" unit={currencyUnit} value={avgWin} />
-                <InputRow inputMode="decimal" label="평균 손실" onChange={setAvgLoss} tone="loss" type="number" unit={currencyUnit} value={avgLoss} />
+                <InputRow inputMode="decimal" label={t('exp.input.avgWin')} onChange={setAvgWin} tone="profit" type="number" unit={currencyUnit} value={avgWin} />
+                <InputRow inputMode="decimal" label={t('exp.input.avgLoss')} onChange={setAvgLoss} tone="loss" type="number" unit={currencyUnit} value={avgLoss} />
               </div>
             )}
           </div>
         </SectionCard>
 
-        <ResultCard title="전략 결과">
+        <ResultCard title={t('exp.result.title')}>
           {result && tooltips ? (
             <div>
               <div className="mb-5">
-                <p className="text-xs uppercase tracking-[0.14em] text-[color:var(--color-text-muted)]">Expectancy</p>
+                <p className="text-xs uppercase tracking-[0.14em] text-[color:var(--color-text-muted)]">{t('exp.metric.expectancy')}</p>
                 <ValueWithTooltip className="mt-2" tone={result.expectancy >= 0 ? 'profit' : 'loss'} tooltip={tooltips.expectancy}>
                   <p className="text-data text-3xl font-semibold tracking-[-0.05em]">{formatNumber(result.expectancy, 2)}</p>
                 </ValueWithTooltip>
               </div>
-              <MetricRow label="기대값" tooltip={tooltips.expectancy} value={formatNumber(result.expectancy, 2)} />
-              <MetricRow label="손익분기 승률" tooltip={tooltips.breakEven} value={formatPct(result.breakEvenWinRate * 100, 2)} />
+              <MetricRow label={t('exp.metric.expectancy')} tooltip={tooltips.expectancy} value={formatNumber(result.expectancy, 2)} />
+              <MetricRow label={t('exp.metric.breakEven')} tooltip={tooltips.breakEven} value={formatPct(result.breakEvenWinRate * 100, 2)} />
               <MetricRow
-                label="전략 판정"
+                label={t('exp.metric.judgement')}
                 tooltip={tooltips.judgement}
-                value={result.expectancy > 0 ? '양의 기대값' : result.expectancy < 0 ? '음의 기대값' : '중립'}
+                value={result.expectancy > 0 ? t('exp.judgement.positive') : result.expectancy < 0 ? t('exp.judgement.negative') : t('exp.judgement.neutral')}
               />
             </div>
           ) : (
-            <p className="text-sm text-[color:var(--color-text-secondary)]">승률과 손익비 또는 평균 수익/손실을 입력하면 전략 기대값을 계산합니다.</p>
+            <p className="text-sm text-[color:var(--color-text-secondary)]">{t('exp.empty.result')}</p>
           )}
         </ResultCard>
       </div>
 
-      <SectionCard eyebrow="Curve" title="손익비 대비 필요 승률">
+      <SectionCard eyebrow={t('common.section.curve')} title={t('exp.curve.title')}>
         <div className="h-[320px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={curvePoints} margin={{ top: 12, right: 8, bottom: 4, left: 0 }}>

@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 import { useSettingsStore } from '../../store/useSettingsStore'
+import { useI18n } from '../../i18n'
 import type { CalculationTooltipPayload } from '../../types'
 import { formatCurrencyUnit, formatCurrencyValue, formatNumber } from '../../utils/format'
 import { ActionButton } from '../../components/ui/ActionButton'
@@ -17,6 +18,7 @@ import { useAvgCalc } from './useAvgCalc'
 
 export function AvgCalcPage() {
   const { settings } = useSettingsStore()
+  const { t } = useI18n()
   const currencyUnit = formatCurrencyUnit(settings.currency)
   const {
     addEntry,
@@ -41,12 +43,12 @@ export function AvgCalcPage() {
 
   const summaryText = result
     ? [
-      `평균단가 ${formatCurrencyValue(result.avgPrice.E, settings.currency)}`,
-      `총수량 ${formatNumber(result.avgPrice.Q, 4)}`,
-      `손절가 ${formatCurrencyValue(result.stopPrice, settings.currency)}`,
-      `익절가 ${formatCurrencyValue(result.takePrice, settings.currency)}`,
+      `${t('avg.metric.averagePrice')} ${formatCurrencyValue(result.avgPrice.E, settings.currency)}`,
+      `${t('avg.metric.totalQty')} ${formatNumber(result.avgPrice.Q, 4)}`,
+      `${t('avg.metric.stopPrice')} ${formatCurrencyValue(result.stopPrice, settings.currency)}`,
+      `${t('avg.metric.takePrice')} ${formatCurrencyValue(result.takePrice, settings.currency)}`,
     ].join(' / ')
-    : '평균단가 계산 결과 없음'
+    : t('avg.noSummary')
 
   const tooltips = useMemo(() => {
     if (!result) {
@@ -91,16 +93,16 @@ export function AvgCalcPage() {
       : `E=${formatNumber(result.avgPrice.E, 4)}, Q=${formatNumber(result.avgPrice.Q, 4)}, targetPnl=+${formatNumber(takeInput, 2)}, s=${s}`
 
     const avgFormula: CalculationTooltipPayload = {
-      title: '평균단가',
+      title: t('avg.metric.averagePrice'),
       formula: 'E = Σ(price_i × qty_i) / Σ(qty_i)',
       substitution: `E = ${formatNumber(result.avgPrice.totalCost, 4)} / ${formatNumber(result.avgPrice.Q, 4)}`,
       result: `E = ${formatCurrencyValue(result.avgPrice.E, settings.currency, 4)}`,
-      note: 'amount 모드 행은 qty = amount / price 로 환산됩니다.',
+      note: t('avg.note.amountMode'),
       tone: 'accent',
     }
 
     const totalQty: CalculationTooltipPayload = {
-      title: '총수량',
+      title: t('avg.metric.totalQty'),
       formula: 'Q = Σ(qty_i)',
       substitution: `Q = ${formatNumber(result.avgPrice.Q, 6)}`,
       result: `Q = ${formatNumber(result.avgPrice.Q, 4)}`,
@@ -108,7 +110,7 @@ export function AvgCalcPage() {
     }
 
     const totalCost: CalculationTooltipPayload = {
-      title: '총 진입금액',
+      title: t('avg.metric.totalCost'),
       formula: 'totalCost = Σ(price_i × qty_i)',
       substitution: `totalCost = E × Q = ${formatNumber(result.avgPrice.E, 4)} × ${formatNumber(result.avgPrice.Q, 4)}`,
       result: formatCurrencyValue(result.avgPrice.totalCost, settings.currency, 2),
@@ -116,34 +118,34 @@ export function AvgCalcPage() {
     }
 
     const stopPrice: CalculationTooltipPayload = {
-      title: '손절가',
+      title: t('avg.metric.stopPrice'),
       formula: stopFormula,
       substitution: stopSubstitution,
       result: `P = ${formatCurrencyValue(result.stopPrice, settings.currency, 4)}`,
-      note: settings.adjustStopTakePriceForFees ? '수수료 보정 ON 상태입니다.' : '수수료 보정 OFF 상태입니다.',
+      note: settings.adjustStopTakePriceForFees ? t('avg.note.adjustOn') : t('avg.note.adjustOff'),
       tone: 'loss',
     }
 
     const takePrice: CalculationTooltipPayload = {
-      title: '익절가',
+      title: t('avg.metric.takePrice'),
       formula: takeFormula,
       substitution: takeSubstitution,
       result: `P = ${formatCurrencyValue(result.takePrice, settings.currency, 4)}`,
-      note: settings.adjustStopTakePriceForFees ? '수수료 보정 ON 상태입니다.' : '수수료 보정 OFF 상태입니다.',
+      note: settings.adjustStopTakePriceForFees ? t('avg.note.adjustOn') : t('avg.note.adjustOff'),
       tone: 'profit',
     }
 
     const stopPnlAmount: CalculationTooltipPayload = {
-      title: '손절 손익',
+      title: t('avg.metric.stopPnl'),
       formula: 'pnlAmount = s × (P - E) × Q',
       substitution: `s=${s}, P=${formatNumber(result.stopPrice, 4)}, E=${formatNumber(result.avgPrice.E, 4)}, Q=${formatNumber(result.avgPrice.Q, 4)}`,
       result: formatCurrencyValue(result.stopPnl.pnlAmount, settings.currency, 2),
-      note: settings.includeFeesInPnL ? '수수료 반영 ON입니다.' : '수수료 반영 OFF입니다.',
+      note: settings.includeFeesInPnL ? t('avg.note.feesOn') : t('avg.note.feesOff'),
       tone: 'loss',
     }
 
     const stopPnlPct: CalculationTooltipPayload = {
-      title: '손절 손익률',
+      title: t('avg.metric.stopPct'),
       formula: 'pnlPct = (pnlAmount / baseCost) × 100',
       substitution: `pnlAmount=${formatNumber(result.stopPnl.pnlAmount, 2)}, pnlPct=${formatNumber(result.stopPnl.pnlPct, 4)}%`,
       result: `${formatNumber(result.stopPnl.pnlPct, 2)}%`,
@@ -151,16 +153,16 @@ export function AvgCalcPage() {
     }
 
     const takePnlAmount: CalculationTooltipPayload = {
-      title: '익절 손익',
+      title: t('avg.metric.takePnl'),
       formula: 'pnlAmount = s × (P - E) × Q',
       substitution: `s=${s}, P=${formatNumber(result.takePrice, 4)}, E=${formatNumber(result.avgPrice.E, 4)}, Q=${formatNumber(result.avgPrice.Q, 4)}`,
       result: formatCurrencyValue(result.takePnl.pnlAmount, settings.currency, 2),
-      note: settings.includeFeesInPnL ? '수수료 반영 ON입니다.' : '수수료 반영 OFF입니다.',
+      note: settings.includeFeesInPnL ? t('avg.note.feesOn') : t('avg.note.feesOff'),
       tone: 'profit',
     }
 
     const takePnlPct: CalculationTooltipPayload = {
-      title: '익절 손익률',
+      title: t('avg.metric.takePct'),
       formula: 'pnlPct = (pnlAmount / baseCost) × 100',
       substitution: `pnlAmount=${formatNumber(result.takePnl.pnlAmount, 2)}, pnlPct=${formatNumber(result.takePnl.pnlPct, 4)}%`,
       result: `${formatNumber(result.takePnl.pnlPct, 2)}%`,
@@ -169,18 +171,18 @@ export function AvgCalcPage() {
 
     const currentAmount: CalculationTooltipPayload | null = result.currentPnl
       ? {
-        title: '현재 손익',
+        title: t('avg.metric.currentPnl'),
         formula: 'pnlAmount = s × (P - E) × Q',
         substitution: `s=${s}, P=${Number.isFinite(currentMark) ? formatNumber(currentMark, 4) : '-'}, E=${formatNumber(result.avgPrice.E, 4)}, Q=${formatNumber(result.avgPrice.Q, 4)}`,
         result: formatCurrencyValue(result.currentPnl.pnlAmount, settings.currency, 2),
-        note: settings.includeFeesInPnL ? '수수료 반영 ON입니다.' : '수수료 반영 OFF입니다.',
+        note: settings.includeFeesInPnL ? t('avg.note.feesOn') : t('avg.note.feesOff'),
         tone: result.currentPnl.pnlAmount >= 0 ? 'profit' : 'loss',
       }
       : null
 
     const currentPct: CalculationTooltipPayload | null = result.currentPnl
       ? {
-        title: '현재 손익률',
+        title: t('avg.metric.currentPct'),
         formula: 'pnlPct = (pnlAmount / baseCost) × 100',
         substitution: `pnlAmount=${formatNumber(result.currentPnl.pnlAmount, 2)}, pnlPct=${formatNumber(result.currentPnl.pnlPct, 4)}%`,
         result: `${formatNumber(result.currentPnl.pnlPct, 2)}%`,
@@ -190,7 +192,7 @@ export function AvgCalcPage() {
 
     const currentRoi: CalculationTooltipPayload | null = result.currentPnl && typeof result.currentPnl.roiPct === 'number'
       ? {
-        title: '현재 ROI',
+        title: t('avg.metric.currentRoi'),
         formula: 'roiPct = (pnlAmount / margin) × 100, margin = (E×Q)/leverage',
         substitution: `pnlAmount=${formatNumber(result.currentPnl.pnlAmount, 2)}, leverage=${formatNumber(settings.leverage, 0)}`,
         result: `${formatNumber(result.currentPnl.roiPct, 2)}%`,
@@ -212,7 +214,7 @@ export function AvgCalcPage() {
       currentPct,
       currentRoi,
     }
-  }, [currentPrice, direction, result, settings.adjustStopTakePriceForFees, settings.currency, settings.includeFeesInPnL, settings.leverage, stopConfig.mode, stopConfig.value, takeConfig.mode, takeConfig.value])
+  }, [currentPrice, direction, result, settings.adjustStopTakePriceForFees, settings.currency, settings.includeFeesInPnL, settings.leverage, stopConfig.mode, stopConfig.value, t, takeConfig.mode, takeConfig.value])
 
   return (
     <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
@@ -220,19 +222,19 @@ export function AvgCalcPage() {
         <SectionCard
           actions={
             <ActionButton onClick={reset} tone="warning" variant="outline">
-              현재 입력 초기화
+              {t('common.resetInputs')}
             </ActionButton>
           }
-          description="분할 진입 평균단가를 계산하고 같은 기준으로 손절, 익절, 현재 손익을 즉시 확인합니다."
-          eyebrow="Average Entry"
-          title="평균단가 + 손절/익절"
+          description={t('avg.card.description')}
+          eyebrow={t('avg.card.eyebrow')}
+          title={t('avg.card.title')}
         >
           <div className="space-y-4">
             <SegmentedControl
               onChange={setDirection}
               options={[
-                { label: 'LONG', value: 'LONG' },
-                { label: 'SHORT', value: 'SHORT' },
+                { label: t('common.long'), value: 'LONG' },
+                { label: t('common.short'), value: 'SHORT' },
               ]}
               tone={direction === 'LONG' ? 'profit' : 'loss'}
               value={direction}
@@ -253,19 +255,19 @@ export function AvgCalcPage() {
             </div>
 
             <ActionButton onClick={addEntry} tone="accent" variant="outline">
-              + 행 추가
+              {t('common.addRow')}
             </ActionButton>
           </div>
         </SectionCard>
 
-        <SectionCard eyebrow="Targets" title="손절 / 익절 설정">
+        <SectionCard eyebrow={t('common.section.targets')} title={t('avg.targets.title')}>
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-4 rounded-[var(--radius-control)] border border-[color:var(--color-border-subtle)] bg-black/10 p-4">
               <SegmentedControl
                 onChange={(value) => setStopConfig({ mode: value })}
                 options={[
-                  { label: '손절 %', value: 'pct' },
-                  { label: '손절 금액', value: 'amount' },
+                  { label: t('avg.stop.modePct'), value: 'pct' },
+                  { label: t('avg.stop.modeAmount'), value: 'amount' },
                 ]}
                 tone="loss"
                 value={stopConfig.mode}
@@ -273,7 +275,7 @@ export function AvgCalcPage() {
               <InputRow
                 error={stopError ?? undefined}
                 inputMode="decimal"
-                label="손절 값"
+                label={t('avg.input.stopValue')}
                 onChange={(value) => setStopConfig({ value })}
                 placeholder="0"
                 tone="loss"
@@ -287,8 +289,8 @@ export function AvgCalcPage() {
               <SegmentedControl
                 onChange={(value) => setTakeConfig({ mode: value })}
                 options={[
-                  { label: '익절 %', value: 'pct' },
-                  { label: '익절 금액', value: 'amount' },
+                  { label: t('avg.take.modePct'), value: 'pct' },
+                  { label: t('avg.take.modeAmount'), value: 'amount' },
                 ]}
                 tone="profit"
                 value={takeConfig.mode}
@@ -296,7 +298,7 @@ export function AvgCalcPage() {
               <InputRow
                 error={takeError ?? undefined}
                 inputMode="decimal"
-                label="익절 값"
+                label={t('avg.input.takeValue')}
                 onChange={(value) => setTakeConfig({ value })}
                 placeholder="0"
                 tone="profit"
@@ -308,13 +310,13 @@ export function AvgCalcPage() {
           </div>
         </SectionCard>
 
-        <SectionCard eyebrow="Mark Price" title="현재가 기준 손익">
+        <SectionCard eyebrow={t('common.section.markPrice')} title={t('avg.mark.title')}>
           <InputRow
             error={currentPriceError ?? undefined}
             inputMode="decimal"
-            label="현재가"
+            label={t('avg.input.currentPrice')}
             onChange={setCurrentPrice}
-            placeholder="선택 입력"
+            placeholder={t('avg.input.optional')}
             tone="warning"
             type="number"
             unit={currencyUnit}
@@ -326,13 +328,13 @@ export function AvgCalcPage() {
       <div className="space-y-5">
         <ResultCard
           actions={<CopyButton text={summaryText} />}
-          title="포지션 요약"
+          title={t('avg.summary.title')}
         >
           {result && tooltips ? (
             <div>
               <div className="mb-5 flex items-end justify-between gap-4">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.14em] text-[color:var(--color-text-muted)]">Average Price</p>
+                  <p className="text-xs uppercase tracking-[0.14em] text-[color:var(--color-text-muted)]">{t('avg.metric.averagePrice')}</p>
                   <ValueWithTooltip className="mt-2" tone="accent" tooltip={tooltips.avgFormula}>
                     <p className="text-data text-3xl font-semibold tracking-[-0.05em]">{formatNumber(result.avgPrice.E)}</p>
                   </ValueWithTooltip>
@@ -345,35 +347,35 @@ export function AvgCalcPage() {
                   <PnlBadge format="pct" value={result.currentPnl?.pnlPct ?? 0} />
                 )}
               </div>
-              <MetricRow label="총수량" tooltip={tooltips.totalQty} value={formatNumber(result.avgPrice.Q, 4)} />
-              <MetricRow label="총 진입금액" tooltip={tooltips.totalCost} value={formatCurrencyValue(result.avgPrice.totalCost, settings.currency)} />
+              <MetricRow label={t('avg.metric.totalQty')} tooltip={tooltips.totalQty} value={formatNumber(result.avgPrice.Q, 4)} />
+              <MetricRow label={t('avg.metric.totalCost')} tooltip={tooltips.totalCost} value={formatCurrencyValue(result.avgPrice.totalCost, settings.currency)} />
             </div>
           ) : (
-            <p className="text-sm text-[color:var(--color-text-secondary)]">유효한 진입 행을 입력하면 평균단가와 목표 가격을 계산합니다.</p>
+            <p className="text-sm text-[color:var(--color-text-secondary)]">{t('avg.empty.summary')}</p>
           )}
         </ResultCard>
 
-        <ResultCard title="손절 / 익절 결과">
+        <ResultCard title={t('avg.stopTake.title')}>
           {result && tooltips ? (
             <div>
-              <MetricRow label="손절가" tone="loss" tooltip={tooltips.stopPrice} value={formatCurrencyValue(result.stopPrice, settings.currency)} />
-              <MetricRow label="손절 손익" tooltip={tooltips.stopPnlAmount} value={<PnlBadge size="sm" value={result.stopPnl.pnlAmount} />} />
-              <MetricRow label="손절 손익률" tooltip={tooltips.stopPnlPct} value={<PnlBadge format="pct" size="sm" value={result.stopPnl.pnlPct} />} />
-              <MetricRow label="익절가" tone="profit" tooltip={tooltips.takePrice} value={formatCurrencyValue(result.takePrice, settings.currency)} />
-              <MetricRow label="익절 손익" tooltip={tooltips.takePnlAmount} value={<PnlBadge size="sm" value={result.takePnl.pnlAmount} />} />
-              <MetricRow label="익절 손익률" tooltip={tooltips.takePnlPct} value={<PnlBadge format="pct" size="sm" value={result.takePnl.pnlPct} />} />
+              <MetricRow label={t('avg.metric.stopPrice')} tone="loss" tooltip={tooltips.stopPrice} value={formatCurrencyValue(result.stopPrice, settings.currency)} />
+              <MetricRow label={t('avg.metric.stopPnl')} tooltip={tooltips.stopPnlAmount} value={<PnlBadge size="sm" value={result.stopPnl.pnlAmount} />} />
+              <MetricRow label={t('avg.metric.stopPct')} tooltip={tooltips.stopPnlPct} value={<PnlBadge format="pct" size="sm" value={result.stopPnl.pnlPct} />} />
+              <MetricRow label={t('avg.metric.takePrice')} tone="profit" tooltip={tooltips.takePrice} value={formatCurrencyValue(result.takePrice, settings.currency)} />
+              <MetricRow label={t('avg.metric.takePnl')} tooltip={tooltips.takePnlAmount} value={<PnlBadge size="sm" value={result.takePnl.pnlAmount} />} />
+              <MetricRow label={t('avg.metric.takePct')} tooltip={tooltips.takePnlPct} value={<PnlBadge format="pct" size="sm" value={result.takePnl.pnlPct} />} />
             </div>
           ) : (
-            <p className="text-sm text-[color:var(--color-text-secondary)]">손절/익절 설정과 유효한 진입값이 있으면 결과가 표시됩니다.</p>
+            <p className="text-sm text-[color:var(--color-text-secondary)]">{t('avg.empty.stopTake')}</p>
           )}
         </ResultCard>
 
-        <ResultCard title="현재가 기준 손익">
+        <ResultCard title={t('avg.current.title')}>
           {result?.currentPnl && tooltips?.currentAmount && tooltips.currentPct ? (
             <div>
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.14em] text-[color:var(--color-text-muted)]">Current PnL</p>
+                  <p className="text-xs uppercase tracking-[0.14em] text-[color:var(--color-text-muted)]">{t('avg.metric.currentPnl')}</p>
                   <ValueWithTooltip className="mt-2" tone={result.currentPnl.pnlAmount >= 0 ? 'profit' : 'loss'} tooltip={tooltips.currentAmount}>
                     <p className="text-data text-3xl font-semibold tracking-[-0.05em]">{formatNumber(result.currentPnl.pnlAmount)}</p>
                   </ValueWithTooltip>
@@ -381,14 +383,14 @@ export function AvgCalcPage() {
                 <PnlBadge value={result.currentPnl.pnlAmount} />
               </div>
               <div className="mt-5">
-                <MetricRow label="손익률" tooltip={tooltips.currentPct} value={<PnlBadge format="pct" size="sm" value={result.currentPnl.pnlPct} />} />
+                <MetricRow label={t('avg.metric.currentPct')} tooltip={tooltips.currentPct} value={<PnlBadge format="pct" size="sm" value={result.currentPnl.pnlPct} />} />
                 {typeof result.currentPnl.roiPct === 'number' && tooltips.currentRoi && (
-                  <MetricRow label="ROI" tooltip={tooltips.currentRoi} value={<PnlBadge format="pct" size="sm" value={result.currentPnl.roiPct} />} />
+                  <MetricRow label={t('avg.metric.currentRoi')} tooltip={tooltips.currentRoi} value={<PnlBadge format="pct" size="sm" value={result.currentPnl.roiPct} />} />
                 )}
               </div>
             </div>
           ) : (
-            <p className="text-sm text-[color:var(--color-text-secondary)]">현재가를 입력하면 현재 손익과 손익률을 확인할 수 있습니다.</p>
+            <p className="text-sm text-[color:var(--color-text-secondary)]">{t('avg.empty.current')}</p>
           )}
         </ResultCard>
       </div>

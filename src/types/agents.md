@@ -17,6 +17,8 @@ export type InputMode = 'qty' | 'amount'
 // 손절/익절 설정 방식: 퍼센트 또는 금액
 export type StopTakeMode = 'pct' | 'amount'
 
+export type LanguageCode = 'en' | 'ko' | 'ja'
+
 export const CURRENCY_CODES = ['USD', 'EUR', 'JPY', 'GBP', 'CNY', 'CHF', 'AUD', 'CAD', 'HKD', 'SGD'] as const
 export type CurrencyCode = (typeof CURRENCY_CODES)[number]
 ```
@@ -27,6 +29,7 @@ export type CurrencyCode = (typeof CURRENCY_CODES)[number]
 
 ```ts
 export interface Settings {
+  language: LanguageCode         // UI 언어 코드, 기본값 'en'
   currency: CurrencyCode         // 표시 통화 코드, 기본값 'USD'
   leverage: number               // >= 1, 기본값 1 (현물)
   feeEntryPct: number            // 진입 수수료 % 단위 입력 (예: 0.05), 기본값 0

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { useI18n } from '../../i18n'
 import { ActionButton } from './ActionButton'
 
 interface Props {
@@ -8,9 +9,10 @@ interface Props {
   variant?: 'ghost' | 'solid'
 }
 
-export function CopyButton({ label = '복사', text, variant = 'ghost' }: Props) {
+export function CopyButton({ label, text, variant = 'ghost' }: Props) {
   const [copied, setCopied] = useState(false)
   const [failed, setFailed] = useState(false)
+  const { t } = useI18n()
 
   const handleCopy = async () => {
     try {
@@ -31,7 +33,7 @@ export function CopyButton({ label = '복사', text, variant = 'ghost' }: Props)
 
   return (
     <ActionButton onClick={handleCopy} tone={failed ? 'warning' : copied ? 'profit' : 'neutral'} variant={variant}>
-      {failed ? '복사 실패' : copied ? '복사됨' : label}
+      {failed ? t('copy.failed') : copied ? t('copy.copied') : label ?? t('copy.default')}
     </ActionButton>
   )
 }

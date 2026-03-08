@@ -14,6 +14,8 @@ export type RiskMode = 'pct' | 'amount'
 
 export type SimulatorYAxis = 'amount' | 'pct' | 'roi'
 
+export type LanguageCode = 'en' | 'ko' | 'ja'
+
 export const CURRENCY_CODES = ['USD', 'EUR', 'JPY', 'GBP', 'CNY', 'CHF', 'AUD', 'CAD', 'HKD', 'SGD'] as const
 
 export type CurrencyCode = (typeof CURRENCY_CODES)[number]
@@ -28,6 +30,7 @@ export interface CalculationTooltipPayload {
 }
 
 export interface Settings {
+  language: LanguageCode
   currency: CurrencyCode
   leverage: number
   feeEntryPct: number

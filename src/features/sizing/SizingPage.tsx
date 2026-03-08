@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 
+import { useI18n } from '../../i18n'
 import { useSettingsStore } from '../../store/useSettingsStore'
 import type { CalculationTooltipPayload } from '../../types'
 import { formatCurrencyUnit, formatCurrencyValue, formatNumber } from '../../utils/format'
@@ -16,6 +17,7 @@ import { useSizing } from './useSizing'
 
 export function SizingPage() {
   const { settings } = useSettingsStore()
+  const { t } = useI18n()
   const currencyUnit = formatCurrencyUnit(settings.currency)
   const {
     accountEquity,
@@ -46,7 +48,7 @@ export function SizingPage() {
     const stop = Number.parseFloat(stopPrice)
 
     const riskAmount: CalculationTooltipPayload = {
-      title: '허용 손실 금액',
+      title: t('sizing.metric.riskAmount'),
       formula: riskMode === 'pct' ? 'riskAmount = equity × riskPct / 100' : 'riskAmount = riskValue',
       substitution: riskMode === 'pct' ? `${formatNumber(equity, 2)} × ${formatNumber(risk, 2)} / 100` : `${formatNumber(risk, 2)}`,
       result: formatCurrencyValue(result.riskAmount, settings.currency, 2),
@@ -54,7 +56,7 @@ export function SizingPage() {
     }
 
     const qty: CalculationTooltipPayload = {
-      title: '권장 수량',
+      title: t('sizing.metric.qty'),
       formula: 'Q = min(riskQty, leverageCapQty)',
       substitution: `riskQty=${formatNumber(result.riskQty, 6)}, leverageCapQty=${formatNumber(result.leverageCapQty, 6)}`,
       result: `${formatNumber(result.qty, 6)}`,
@@ -63,7 +65,7 @@ export function SizingPage() {
     }
 
     const notional: CalculationTooltipPayload = {
-      title: '포지션 명목',
+      title: t('sizing.metric.notional'),
       formula: 'notional = entryPrice × qty',
       substitution: `${formatNumber(entry, 4)} × ${formatNumber(result.qty, 6)}`,
       result: formatCurrencyValue(result.notional, settings.currency, 2),
@@ -71,7 +73,7 @@ export function SizingPage() {
     }
 
     const margin: CalculationTooltipPayload = {
-      title: '증거금',
+      title: t('sizing.metric.margin'),
       formula: 'margin = notional / leverage',
       substitution: `${formatNumber(result.notional, 2)} / leverage`,
       result: formatCurrencyValue(result.margin, settings.currency, 2),
@@ -79,7 +81,7 @@ export function SizingPage() {
     }
 
     const stopPnlAmount: CalculationTooltipPayload = {
-      title: '손절 시 손익',
+      title: t('sizing.metric.stopPnl'),
       formula: 'pnlAmount = s × (P - E) × Q',
       substitution: `direction=${direction}, E=${formatNumber(entry, 4)}, P=${formatNumber(stop, 4)}, Q=${formatNumber(result.qty, 6)}`,
       result: formatCurrencyValue(result.stopPnl.pnlAmount, settings.currency, 2),
@@ -87,7 +89,7 @@ export function SizingPage() {
     }
 
     const stopPnlPct: CalculationTooltipPayload = {
-      title: '손절 시 손익률',
+      title: t('sizing.metric.stopPct'),
       formula: 'pnlPct = (pnlAmount / baseCost) × 100',
       substitution: `pnlAmount=${formatNumber(result.stopPnl.pnlAmount, 2)}`,
       result: `${formatNumber(result.stopPnl.pnlPct, 2)}%`,
@@ -96,7 +98,7 @@ export function SizingPage() {
 
     const stopRoi: CalculationTooltipPayload | null = typeof result.stopPnl.roiPct === 'number'
       ? {
-        title: '손절 시 ROI',
+        title: t('sizing.metric.stopRoi'),
         formula: 'roiPct = (pnlAmount / margin) × 100',
         substitution: `pnlAmount=${formatNumber(result.stopPnl.pnlAmount, 2)}, margin=${formatNumber(result.margin, 2)}`,
         result: `${formatNumber(result.stopPnl.roiPct, 2)}%`,
@@ -105,7 +107,7 @@ export function SizingPage() {
       : null
 
     return { riskAmount, qty, notional, margin, stopPnlAmount, stopPnlPct, stopRoi }
-  }, [accountEquity, direction, entryPrice, result, riskMode, riskValue, settings.currency, settings.leverage, stopPrice])
+  }, [accountEquity, direction, entryPrice, result, riskMode, riskValue, settings.currency, settings.leverage, stopPrice, t])
 
   return (
     <div className="grid gap-5 xl:grid-cols-[1.05fr_0.95fr]">
@@ -113,38 +115,38 @@ export function SizingPage() {
         <SectionCard
           actions={
             <ActionButton onClick={reset} tone="warning" variant="outline">
-              현재 입력 초기화
+              {t('common.resetInputs')}
             </ActionButton>
           }
-          description="허용 손실 기준으로 적정 포지션 수량과 증거금을 계산합니다."
-          eyebrow="Risk Sizing"
-          title="포지션 사이징"
+          description={t('sizing.card.description')}
+          eyebrow={t('sizing.card.title')}
+          title={t('sizing.card.title')}
         >
           <div className="space-y-4">
             <SegmentedControl
               onChange={setDirection}
               options={[
-                { label: 'LONG', value: 'LONG' },
-                { label: 'SHORT', value: 'SHORT' },
+                { label: t('common.long'), value: 'LONG' },
+                { label: t('common.short'), value: 'SHORT' },
               ]}
               tone={direction === 'LONG' ? 'profit' : 'loss'}
               value={direction}
             />
             <div className="grid gap-4 md:grid-cols-2">
-              <InputRow inputMode="decimal" label="계좌 자산" onChange={setAccountEquity} tone="accent" type="number" unit={currencyUnit} value={accountEquity} />
+              <InputRow inputMode="decimal" label={t('sizing.input.equity')} onChange={setAccountEquity} tone="accent" type="number" unit={currencyUnit} value={accountEquity} />
               <div className="space-y-4">
                 <SegmentedControl
                   onChange={setRiskMode}
                   options={[
-                    { label: '리스크 %', value: 'pct' },
-                    { label: '리스크 금액', value: 'amount' },
+                    { label: t('sizing.mode.riskPct'), value: 'pct' },
+                    { label: t('sizing.mode.riskAmount'), value: 'amount' },
                   ]}
                   tone="warning"
                   value={riskMode}
                 />
                 <InputRow
                   inputMode="decimal"
-                  label="허용 손실"
+                  label={t('sizing.input.risk')}
                   onChange={setRiskValue}
                   tone="warning"
                   type="number"
@@ -156,10 +158,10 @@ export function SizingPage() {
           </div>
         </SectionCard>
 
-        <SectionCard eyebrow="Prices" title="진입가 / 손절가">
+        <SectionCard eyebrow={t('common.section.prices')} title={t('sizing.prices.title')}>
           <div className="grid gap-4 md:grid-cols-2">
-            <InputRow inputMode="decimal" label="진입가" onChange={setEntryPrice} tone="accent" type="number" unit={currencyUnit} value={entryPrice} />
-            <InputRow inputMode="decimal" label="손절가" onChange={setStopPrice} tone="loss" type="number" unit={currencyUnit} value={stopPrice} />
+            <InputRow inputMode="decimal" label={t('sizing.input.entry')} onChange={setEntryPrice} tone="accent" type="number" unit={currencyUnit} value={entryPrice} />
+            <InputRow inputMode="decimal" label={t('sizing.input.stop')} onChange={setStopPrice} tone="loss" type="number" unit={currencyUnit} value={stopPrice} />
           </div>
           <div className="mt-3">
             <FieldError>{error ?? undefined}</FieldError>
@@ -167,27 +169,27 @@ export function SizingPage() {
         </SectionCard>
       </div>
 
-      <ResultCard title="사이징 결과">
+      <ResultCard title={t('sizing.result.title')}>
         {result && tooltips ? (
           <div>
             <div className="mb-5">
-              <p className="text-xs uppercase tracking-[0.14em] text-[color:var(--color-text-muted)]">Recommended Size</p>
+              <p className="text-xs uppercase tracking-[0.14em] text-[color:var(--color-text-muted)]">{t('sizing.metric.qty')}</p>
               <ValueWithTooltip className="mt-2" tone="accent" tooltip={tooltips.qty}>
                 <p className="text-data text-3xl font-semibold tracking-[-0.05em]">{formatNumber(result.qty, 4)}</p>
               </ValueWithTooltip>
             </div>
-            <MetricRow label="허용 손실 금액" tooltip={tooltips.riskAmount} value={formatCurrencyValue(result.riskAmount, settings.currency)} />
-            <MetricRow label="권장 수량" tooltip={tooltips.qty} value={formatNumber(result.qty, 4)} />
-            <MetricRow label="포지션 명목" tooltip={tooltips.notional} value={formatCurrencyValue(result.notional, settings.currency)} />
-            <MetricRow label="증거금" tooltip={tooltips.margin} value={formatCurrencyValue(result.margin, settings.currency)} />
-            <MetricRow label="손절 시 손익" tooltip={tooltips.stopPnlAmount} value={<PnlBadge size="sm" value={result.stopPnl.pnlAmount} />} />
-            <MetricRow label="손절 시 손익률" tooltip={tooltips.stopPnlPct} value={<PnlBadge format="pct" size="sm" value={result.stopPnl.pnlPct} />} />
+            <MetricRow label={t('sizing.metric.riskAmount')} tooltip={tooltips.riskAmount} value={formatCurrencyValue(result.riskAmount, settings.currency)} />
+            <MetricRow label={t('sizing.metric.qty')} tooltip={tooltips.qty} value={formatNumber(result.qty, 4)} />
+            <MetricRow label={t('sizing.metric.notional')} tooltip={tooltips.notional} value={formatCurrencyValue(result.notional, settings.currency)} />
+            <MetricRow label={t('sizing.metric.margin')} tooltip={tooltips.margin} value={formatCurrencyValue(result.margin, settings.currency)} />
+            <MetricRow label={t('sizing.metric.stopPnl')} tooltip={tooltips.stopPnlAmount} value={<PnlBadge size="sm" value={result.stopPnl.pnlAmount} />} />
+            <MetricRow label={t('sizing.metric.stopPct')} tooltip={tooltips.stopPnlPct} value={<PnlBadge format="pct" size="sm" value={result.stopPnl.pnlPct} />} />
             {typeof result.stopPnl.roiPct === 'number' && tooltips.stopRoi && (
-              <MetricRow label="손절 시 ROI" tooltip={tooltips.stopRoi} value={<PnlBadge format="pct" size="sm" value={result.stopPnl.roiPct} />} />
+              <MetricRow label={t('sizing.metric.stopRoi')} tooltip={tooltips.stopRoi} value={<PnlBadge format="pct" size="sm" value={result.stopPnl.roiPct} />} />
             )}
           </div>
         ) : (
-          <p className="text-sm text-[color:var(--color-text-secondary)]">계좌 자산, 허용 손실, 진입가와 손절가를 입력하면 적정 수량을 계산합니다.</p>
+          <p className="text-sm text-[color:var(--color-text-secondary)]">{t('sizing.empty.result')}</p>
         )}
       </ResultCard>
     </div>

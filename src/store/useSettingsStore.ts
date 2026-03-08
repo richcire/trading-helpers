@@ -1,9 +1,11 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
+import { detectBrowserLanguage } from '../i18n/language'
 import { CURRENCY_CODES, type CurrencyCode, type Settings } from '../types'
 
 export const DEFAULT_SETTINGS: Settings = {
+  language: 'en',
   currency: 'USD',
   leverage: 1,
   feeEntryPct: 0,
@@ -48,9 +50,14 @@ export const useSettingsStore = create<SettingsStore>()(
       name: 'trading-settings',
       merge: (persistedState, currentState) => {
         const persisted = persistedState as Partial<SettingsStore> | undefined
+        const persistedLanguage = persisted?.settings?.language
+
         return {
           ...currentState,
-          settings: normalizeSettings(persisted?.settings),
+          settings: normalizeSettings({
+            ...persisted?.settings,
+            language: persistedLanguage ? persistedLanguage : detectBrowserLanguage(),
+          }),
         }
       },
     },
