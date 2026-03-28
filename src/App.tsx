@@ -1,4 +1,12 @@
-import { type ComponentType, useEffect, useMemo, useState } from "react";
+import {
+  type ComponentType,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import { Header } from "./components/layout/Header";
@@ -91,10 +99,23 @@ function ensureCanonicalLink() {
   return link;
 }
 
+const InitialLoadContext = createContext(true);
+export const useInitialLoad = () => useContext(InitialLoadContext);
+
 export default function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const location = useLocation();
   const { t } = useI18n();
+  const initialLoadRef = useRef(true);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  useEffect(() => {
+    const id = setTimeout(() => {
+      initialLoadRef.current = false;
+      setIsInitialLoad(false);
+    }, 600);
+    return () => clearTimeout(id);
+  }, []);
 
   const appRoutes = useMemo<readonly AppRoute[]>(() => {
     return ROUTE_BLUEPRINT.map((route) => {
@@ -159,6 +180,7 @@ export default function App() {
   }, [currentRoute]);
 
   return (
+    <InitialLoadContext.Provider value={isInitialLoad}>
     <div className="min-h-screen bg-transparent text-[color:var(--color-text-primary)]">
       <div className="sticky top-0 z-30 border-b border-[color:var(--color-border-subtle)] bg-[rgba(7,17,23,0.82)] backdrop-blur-xl supports-[backdrop-filter]:bg-[rgba(7,17,23,0.74)]">
         <div className="mx-auto w-full max-w-[var(--container-wide)]">
@@ -183,7 +205,7 @@ export default function App() {
       </div>
       <main className="mx-auto w-full max-w-[var(--container-wide)] px-3 py-4 sm:px-6 sm:py-8">
         <SessionTimeline />
-        <section className="animate-card-in mb-4 sm:mb-6 rounded-[var(--radius-panel)] border-l-2 border-l-[color:var(--color-accent)] panel-surface px-4 sm:px-5 py-3 sm:py-4">
+        <section className={`${isInitialLoad ? "animate-card-in" : ""} mb-4 sm:mb-6 rounded-[var(--radius-panel)] border-l-2 border-l-[color:var(--color-accent)] panel-surface px-4 sm:px-5 py-3 sm:py-4`}>
           <h2 className="mt-2 text-lg sm:text-xl font-semibold tracking-[-0.03em] text-[color:var(--color-text-primary)]">
             {currentRoute.introTitle}
           </h2>
@@ -211,5 +233,6 @@ export default function App() {
       </footer>
       {settingsOpen && <SettingsModal onClose={() => setSettingsOpen(false)} />}
     </div>
+    </InitialLoadContext.Provider>
   );
 }

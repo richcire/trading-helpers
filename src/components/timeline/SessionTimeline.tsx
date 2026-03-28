@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useInitialLoad } from "../../App";
 import { useI18n } from "../../i18n/useI18n";
 import { useSettingsStore } from "../../store/useSettingsStore";
 import type { MarketType } from "../../types";
@@ -211,6 +212,7 @@ function SessionInfoPopover({
 
 export function SessionTimeline() {
   const { t } = useI18n();
+  const isInitialLoad = useInitialLoad();
   const { marketType, sessions, overlaps, segments, currentTimePct, utcTimeString, sessionEvents, dstKey } =
     useSessionTimeline();
 
@@ -218,7 +220,7 @@ export function SessionTimeline() {
   const row1 = segments.filter((s) => s.row === 1);
 
   return (
-    <section className="animate-card-in mb-4 rounded-[var(--radius-panel)] panel-surface px-4 py-3 sm:px-5 sm:py-4 relative z-20 overflow-visible">
+    <section className={`${isInitialLoad ? "animate-card-in" : ""} mb-4 rounded-[var(--radius-panel)] panel-surface px-4 py-3 sm:px-5 sm:py-4 relative z-20 overflow-visible`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-2">
         <span className="flex items-center text-[10px] sm:text-xs font-semibold tracking-[0.08em] uppercase text-[color:var(--color-text-muted)]">

@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import type { ReactNode } from 'react'
 
+import { useInitialLoad } from '../../App'
 import type { SurfaceLevel, Tone } from '../../types'
 
 interface Props {
@@ -40,16 +41,19 @@ export function SectionCard({
   title,
   tone = 'neutral',
 }: Props) {
+  const isInitialLoad = useInitialLoad()
+  const shouldAnimate = isInitialLoad && typeof stagger === 'number'
+
   return (
     <section
       className={clsx(
         'rounded-[var(--radius-panel)] p-4 sm:p-6',
         surfaceClasses[surface],
         toneClasses[tone],
-        typeof stagger === 'number' && 'animate-card-in',
+        shouldAnimate && 'animate-card-in',
         className,
       )}
-      style={typeof stagger === 'number' ? { '--stagger': `${stagger}ms` } as React.CSSProperties : undefined}
+      style={shouldAnimate ? { '--stagger': `${stagger}ms` } as React.CSSProperties : undefined}
     >
       {(eyebrow || title || description || actions) && (
         <div className="mb-4 sm:mb-5 flex items-start justify-between gap-3 sm:gap-4">
