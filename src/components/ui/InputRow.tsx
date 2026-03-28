@@ -7,6 +7,11 @@ import { FieldError } from './FieldError'
 import { FieldHint } from './FieldHint'
 import { FieldLabel } from './FieldLabel'
 
+interface ModeOption<T extends string = string> {
+  label: string
+  value: T
+}
+
 interface Props {
   label: string
   value: string
@@ -22,6 +27,17 @@ interface Props {
   min?: number
   max?: number
   step?: number | 'any'
+  modeOptions?: ModeOption[]
+  modeValue?: string
+  onModeChange?: (value: string) => void
+}
+
+const modeToneClasses: Record<Tone, string> = {
+  neutral: 'text-[color:var(--color-text-secondary)]',
+  accent: 'text-[color:var(--color-accent)]',
+  profit: 'text-[color:var(--color-profit)]',
+  loss: 'text-[color:var(--color-loss)]',
+  warning: 'text-[color:var(--color-warning)]',
 }
 
 const toneClasses: Record<Tone, string> = {
@@ -47,6 +63,9 @@ export function InputRow({
   type = 'text',
   unit,
   value,
+  modeOptions,
+  modeValue,
+  onModeChange,
 }: Props) {
   const inputId = useId()
   const { t } = useI18n()
@@ -89,6 +108,23 @@ export function InputRow({
           !disabled && !error && toneClasses[tone],
         )}
       >
+        {modeOptions && onModeChange && (
+          <select
+            className={clsx(
+              'md:hidden shrink-0 cursor-pointer appearance-none border-r border-[color:var(--color-border-subtle)] bg-transparent mr-2 pr-2 text-xs font-semibold tracking-wide outline-none',
+              modeToneClasses[tone],
+            )}
+            disabled={disabled}
+            onChange={(e) => onModeChange(e.target.value)}
+            value={modeValue}
+          >
+            {modeOptions.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        )}
         <input
           className="text-data w-full border-none bg-transparent px-1 pr-2 text-right text-sm font-medium tracking-[-0.02em] text-[color:var(--color-text-primary)] outline-none placeholder:text-[color:var(--color-text-muted)] disabled:cursor-not-allowed [appearance:textfield] [-moz-appearance:textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
           disabled={disabled}
@@ -105,20 +141,20 @@ export function InputRow({
         {isNumberInput && !disabled && (
           <div className="ml-1 flex shrink-0 items-center gap-1">
             <button
-              aria-label={t('input.decrease', { label })}
-              className="h-6 w-6 sm:h-7 sm:w-7 cursor-pointer rounded-[10px] border border-[color:var(--color-border-subtle)] bg-black/20 text-xs font-semibold text-[color:var(--color-text-secondary)] transition hover:border-[color:var(--color-border-strong)] hover:text-[color:var(--color-text-primary)] active:scale-95"
-              onClick={() => handleStep(-1)}
-              type="button"
-            >
-              -
-            </button>
-            <button
               aria-label={t('input.increase', { label })}
               className="h-6 w-6 sm:h-7 sm:w-7 cursor-pointer rounded-[10px] border border-[color:var(--color-border-subtle)] bg-black/20 text-xs font-semibold text-[color:var(--color-text-secondary)] transition hover:border-[color:var(--color-border-strong)] hover:text-[color:var(--color-text-primary)] active:scale-95"
               onClick={() => handleStep(1)}
               type="button"
             >
               +
+            </button>
+            <button
+              aria-label={t('input.decrease', { label })}
+              className="h-6 w-6 sm:h-7 sm:w-7 cursor-pointer rounded-[10px] border border-[color:var(--color-border-subtle)] bg-black/20 text-xs font-semibold text-[color:var(--color-text-secondary)] transition hover:border-[color:var(--color-border-strong)] hover:text-[color:var(--color-text-primary)] active:scale-95"
+              onClick={() => handleStep(-1)}
+              type="button"
+            >
+              -
             </button>
           </div>
         )}

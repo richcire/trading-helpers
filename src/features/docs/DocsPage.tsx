@@ -97,7 +97,6 @@ export function DocsPage() {
     <div className="space-y-5">
       <SectionCard
         description={t('docs.quick.description')}
-        eyebrow={t('docs.quick.eyebrow')}
         title={t('docs.quick.title')}
       >
         <ol className="space-y-3 text-sm text-[color:var(--color-text-secondary)]">
@@ -114,7 +113,6 @@ export function DocsPage() {
 
       <SectionCard
         description={t('docs.tools.description')}
-        eyebrow={t('docs.tools.eyebrow')}
         title={t('docs.tools.title')}
       >
         <div className="grid gap-4 lg:grid-cols-2">
@@ -140,7 +138,6 @@ export function DocsPage() {
 
       <SectionCard
         description={t('docs.interpret.description')}
-        eyebrow={t('docs.interpret.eyebrow')}
         title={t('docs.interpret.title')}
       >
         <div className="grid gap-4 md:grid-cols-2">

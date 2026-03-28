@@ -109,7 +109,6 @@ export function SimulatorPage() {
             </ActionButton>
           }
           description={t('sim.card.description')}
-          eyebrow={t('common.section.simulation')}
           stagger={60}
           title={t('sim.card.title')}
         >
@@ -159,7 +158,7 @@ export function SimulatorPage() {
         </ResultCard>
       </div>
 
-      <SectionCard eyebrow={t('common.section.chart')} stagger={160} title={t('sim.chart.title')}>
+      <SectionCard stagger={160} title={t('sim.chart.title')}>
         {points.length > 0 ? (
           <SimChart
             avgPrice={parsePositiveNumber(avgPrice)}

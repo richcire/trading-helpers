@@ -21,7 +21,7 @@ export function EntryRow({ currencyUnit, errors, onChange, onRemove, row, showRe
   const { t } = useI18n()
 
   return (
-    <div className="rounded-[var(--radius-control)] border border-[color:var(--color-border-subtle)] bg-black/10 p-3 sm:p-4">
+    <div className="border-t border-[color:var(--color-border-subtle)] pt-3 sm:pt-4">
       <div className="mb-3 sm:mb-4 flex flex-wrap items-center justify-between gap-2 sm:gap-3">
         <p className="text-sm font-semibold tracking-[-0.02em] text-[color:var(--color-text-primary)]">{t('avg.entryRow')}</p>
         <div className="flex items-center gap-2">

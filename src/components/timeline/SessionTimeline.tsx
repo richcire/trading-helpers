@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useInitialLoad } from "../../App";
 import { useI18n } from "../../i18n/useI18n";
 import { useSettingsStore } from "../../store/useSettingsStore";
@@ -106,7 +106,7 @@ function MarketTypeToggle({ value }: { value: MarketType }) {
   ];
 
   return (
-    <div className="ml-2 inline-flex items-center rounded-full border border-[color:var(--color-border-subtle)] bg-black/10 p-0.5">
+    <div className="inline-flex items-center rounded-full border border-[color:var(--color-border-subtle)] bg-black/10 p-0.5">
       {options.map((opt) => {
         const active = opt.val === value;
         return (
@@ -159,13 +159,13 @@ function SessionInfoPopover({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="ml-1.5 inline-flex items-center justify-center w-4 h-4 rounded-full text-[9px] font-bold leading-none border border-[color:var(--color-border-subtle)] text-[color:var(--color-text-muted)] hover:text-[color:var(--color-text-secondary)] hover:border-[color:var(--color-border-strong)] transition-colors"
+        className="inline-flex items-center justify-center w-4 h-4 rounded-full text-[9px] font-bold leading-none border border-[color:var(--color-border-subtle)] text-[color:var(--color-text-muted)] hover:text-[color:var(--color-text-secondary)] hover:border-[color:var(--color-border-strong)] transition-colors"
         aria-label="Session info"
       >
         ?
       </button>
       {open && (
-        <div className="absolute left-0 top-full mt-2 z-50 w-56 sm:w-64 rounded-[var(--radius-control)] panel-elevated border border-[color:var(--color-border-subtle)] p-3 shadow-[var(--shadow-modal)]">
+        <div className="absolute -right-3 sm:right-auto sm:left-0 top-full mt-2 z-50 w-56 sm:w-64 rounded-[var(--radius-control)] panel-elevated border border-[color:var(--color-border-subtle)] p-3 shadow-[var(--shadow-modal)]">
           <p className="text-[10px] sm:text-xs font-semibold tracking-[0.04em] text-[color:var(--color-text-secondary)] mb-2">
             {title}
           </p>
@@ -210,6 +210,23 @@ function SessionInfoPopover({
   );
 }
 
+function SessionEventBadge({ ev, type }: { ev: { label: string; shortLabel: string; color: string; remainingMin: number }; type: 'closes' | 'opens' }) {
+  return (
+    <span
+      className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9px] sm:text-[10px] font-medium leading-none"
+      style={{
+        backgroundColor: `color-mix(in srgb, ${ev.color} 12%, transparent)`,
+        color: ev.color,
+      }}
+    >
+      <span className="w-1 h-1 rounded-full" style={{ backgroundColor: ev.color, opacity: type === 'closes' ? 1 : 0.5 }} />
+      <span className="sm:hidden">{ev.shortLabel}</span>
+      <span className="hidden sm:inline">{ev.label}</span>
+      <span style={{ opacity: 0.7 }}>{type === 'closes' ? 'closes' : 'opens'} {formatRemaining(ev.remainingMin)}</span>
+    </span>
+  );
+}
+
 export function SessionTimeline() {
   const { t } = useI18n();
   const isInitialLoad = useInitialLoad();
@@ -219,53 +236,61 @@ export function SessionTimeline() {
   const row0 = segments.filter((s) => s.row === 0);
   const row1 = segments.filter((s) => s.row === 1);
 
+  const hudAccent = useMemo(() => {
+    const activeColors = segments
+      .filter((s) => s.active && s.isPrimary)
+      .map((s) => s.color);
+    if (activeColors.length === 0) return undefined;
+    if (activeColors.length === 1) return activeColors[0];
+    return `color-mix(in srgb, ${activeColors[0]} 50%, ${activeColors[1]})`;
+  }, [segments]);
+
+  const hasEvents = sessionEvents.closing.length > 0 || sessionEvents.opening;
+
   return (
-    <section className={`${isInitialLoad ? "animate-card-in" : ""} mb-4 rounded-[var(--radius-panel)] panel-surface px-4 py-3 sm:px-5 sm:py-4 relative z-20 overflow-visible`}>
-      {/* Header */}
-      <div className="flex items-center justify-between mb-2">
-        <span className="flex items-center text-[10px] sm:text-xs font-semibold tracking-[0.08em] uppercase text-[color:var(--color-text-muted)]">
-          Market Sessions
-          <MarketTypeToggle value={marketType} />
-          <SessionInfoPopover sessions={sessions} overlaps={overlaps} marketType={marketType} />
-        </span>
-        <div className="flex flex-col items-end">
-          <span className="flex items-center gap-1.5">
+    <section
+      className={`${isInitialLoad ? "animate-card-in" : ""} mb-4 panel-hud relative z-20 overflow-visible`}
+      style={hudAccent ? { '--hud-accent': hudAccent } as React.CSSProperties : undefined}
+    >
+      {/* Header — stacks vertically on mobile */}
+      <div className="px-4 pt-3 pb-2 sm:px-5 sm:pt-4 sm:pb-2.5">
+        {/* Top row: title + controls left, time right */}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] sm:text-xs font-semibold tracking-[0.08em] uppercase text-[color:var(--color-text-muted)]">
+              Market Sessions
+            </span>
+            <MarketTypeToggle value={marketType} />
+            <SessionInfoPopover sessions={sessions} overlaps={overlaps} marketType={marketType} />
+          </div>
+          <div className="flex items-center gap-1.5 shrink-0">
             {dstKey && (
-              <span className="rounded-full bg-red-500/15 text-red-400 px-1.5 py-0.5 text-[9px] sm:text-[10px] font-semibold leading-none">
+              <span className="hidden sm:inline-flex rounded-full bg-red-500/15 text-red-400 px-1.5 py-0.5 text-[10px] font-semibold leading-none whitespace-nowrap">
                 ☀️ {t(dstKey)}
               </span>
             )}
-            <span className="text-data text-[11px] sm:text-xs text-[color:var(--color-accent)]">
-              UTC {utcTimeString}
+            <span className="text-data text-sm sm:text-base font-semibold text-[color:var(--color-accent)]">
+              {utcTimeString}
             </span>
-          </span>
-          {(sessionEvents.closing.length > 0 || sessionEvents.opening) && (
-            <span className="text-[9px] sm:text-[10px] text-[color:var(--color-text-muted)]">
-              {sessionEvents.closing.map((ev, i) => (
-                <span key={ev.label}>
-                  {i > 0 && <span className="mx-1 opacity-40">·</span>}
-                  <span className="sm:hidden" style={{ color: ev.color }}>{ev.shortLabel}</span>
-                  <span className="hidden sm:inline" style={{ color: ev.color }}>{ev.label}</span>
-                  {" "}closes {formatRemaining(ev.remainingMin)}
-                </span>
-              ))}
-              {sessionEvents.closing.length > 0 && sessionEvents.opening && (
-                <span className="mx-1 opacity-40">·</span>
-              )}
-              {sessionEvents.opening && (
-                <>
-                  <span className="sm:hidden" style={{ color: sessionEvents.opening.color }}>{sessionEvents.opening.shortLabel}</span>
-                  <span className="hidden sm:inline" style={{ color: sessionEvents.opening.color }}>{sessionEvents.opening.label}</span>
-                  {" "}opens {formatRemaining(sessionEvents.opening.remainingMin)}
-                </>
-              )}
-            </span>
-          )}
+            <span className="text-[9px] sm:text-[10px] text-[color:var(--color-text-muted)] font-medium">UTC</span>
+          </div>
         </div>
+
+        {/* Session events — separate row */}
+        {hasEvents && (
+          <div className="flex flex-wrap items-center gap-1 mt-1.5">
+            {sessionEvents.closing.map((ev) => (
+              <SessionEventBadge key={ev.label} ev={ev} type="closes" />
+            ))}
+            {sessionEvents.opening && (
+              <SessionEventBadge ev={sessionEvents.opening} type="opens" />
+            )}
+          </div>
+        )}
       </div>
 
       {/* Timeline */}
-      <div className="relative">
+      <div className="relative px-4 pb-3 sm:px-5 sm:pb-4">
         <HourMarkers />
 
         {/* Session rows */}
@@ -288,8 +313,8 @@ export function SessionTimeline() {
           <CurrentTimeLine pct={currentTimePct} />
         </div>
 
-        {/* Legend - active sessions */}
-        <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2">
+        {/* Legend + DST badge on mobile */}
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2">
           {segments
             .filter((s) => s.isPrimary)
             .map((seg) => (
@@ -317,6 +342,11 @@ export function SessionTimeline() {
                 </span>
               </div>
             ))}
+          {dstKey && (
+            <span className="sm:hidden inline-flex rounded-full bg-red-500/15 text-red-400 px-1.5 py-0.5 text-[9px] font-semibold leading-none whitespace-nowrap">
+              ☀️ {t(dstKey)}
+            </span>
+          )}
         </div>
       </div>
     </section>

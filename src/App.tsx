@@ -10,6 +10,7 @@ import {
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import { Header } from "./components/layout/Header";
+import { MobileSidebar } from "./components/layout/MobileSidebar";
 import { TabNav } from "./components/layout/TabNav";
 import { SettingsModal } from "./components/settings/SettingsModal";
 import { SessionTimeline } from "./components/timeline/SessionTimeline";
@@ -104,6 +105,7 @@ export const useInitialLoad = () => useContext(InitialLoadContext);
 
 export default function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
   const { t } = useI18n();
   const initialLoadRef = useRef(true);
@@ -187,6 +189,7 @@ export default function App() {
           <Header
             docsLabel={docsRoute?.label ?? "Docs"}
             docsPath={docsRoute?.path ?? "/docs"}
+            onMenuClick={() => setSidebarOpen(true)}
             onSettingsClick={() => setSettingsOpen(true)}
           />
           <div className="px-4 sm:px-6">
@@ -205,14 +208,16 @@ export default function App() {
       </div>
       <main className="mx-auto w-full max-w-[var(--container-wide)] px-3 py-4 sm:px-6 sm:py-8">
         <SessionTimeline />
-        <section className={`${isInitialLoad ? "animate-card-in" : ""} mb-4 sm:mb-6 rounded-[var(--radius-panel)] border-l-2 border-l-[color:var(--color-accent)] panel-surface px-4 sm:px-5 py-3 sm:py-4`}>
-          <h2 className="mt-2 text-lg sm:text-xl font-semibold tracking-[-0.03em] text-[color:var(--color-text-primary)]">
-            {currentRoute.introTitle}
-          </h2>
-          <p className="mt-2 text-sm leading-relaxed text-[color:var(--color-text-secondary)]">
-            {currentRoute.introDescription}
-          </p>
-        </section>
+        {currentRoute.id !== "docs" && (
+          <div className={`${isInitialLoad ? "animate-card-in" : ""} mb-4 sm:mb-6 px-1 sm:px-2`}>
+            <h2 className="text-lg sm:text-xl font-semibold tracking-[-0.03em] bg-gradient-to-r from-[color:var(--color-accent)] to-[color:var(--color-info)] bg-clip-text text-transparent">
+              {currentRoute.introTitle}
+            </h2>
+            <p className="mt-1.5 text-sm leading-relaxed text-[color:var(--color-text-muted)]">
+              {currentRoute.introDescription}
+            </p>
+          </div>
+        )}
         <Routes>
           <Route element={<Navigate replace to="/avg-price" />} path="/" />
           {appRoutes.map((route) => (
@@ -231,6 +236,16 @@ export default function App() {
           Trading Helpers &middot; {new Date().getFullYear()}
         </p>
       </footer>
+      {sidebarOpen && (
+        <MobileSidebar
+          docsLabel={docsRoute?.label ?? "Docs"}
+          docsPath={docsRoute?.path ?? "/docs"}
+          onClose={() => setSidebarOpen(false)}
+          tabs={appRoutes
+            .filter((route) => route.showInTabs)
+            .map((route) => ({ id: route.id, label: route.label, to: route.path }))}
+        />
+      )}
       {settingsOpen && <SettingsModal onClose={() => setSettingsOpen(false)} />}
     </div>
     </InitialLoadContext.Provider>

@@ -119,7 +119,6 @@ export function SizingPage() {
             </ActionButton>
           }
           description={t('sizing.card.description')}
-          eyebrow={t('sizing.card.title')}
           stagger={60}
           title={t('sizing.card.title')}
         >
@@ -137,6 +136,7 @@ export function SizingPage() {
               <InputRow inputMode="decimal" label={t('sizing.input.equity')} onChange={setAccountEquity} tone="accent" type="number" unit={currencyUnit} value={accountEquity} />
               <div className="space-y-4">
                 <SegmentedControl
+                  className="hidden md:grid"
                   onChange={setRiskMode}
                   options={[
                     { label: t('sizing.mode.riskPct'), value: 'pct' },
@@ -148,7 +148,13 @@ export function SizingPage() {
                 <InputRow
                   inputMode="decimal"
                   label={t('sizing.input.risk')}
+                  modeOptions={[
+                    { label: t('sizing.mode.riskPct'), value: 'pct' },
+                    { label: t('sizing.mode.riskAmount'), value: 'amount' },
+                  ]}
+                  modeValue={riskMode}
                   onChange={setRiskValue}
+                  onModeChange={setRiskMode}
                   tone="warning"
                   type="number"
                   unit={riskMode === 'pct' ? '%' : currencyUnit}
@@ -159,7 +165,7 @@ export function SizingPage() {
           </div>
         </SectionCard>
 
-        <SectionCard eyebrow={t('common.section.prices')} stagger={120} title={t('sizing.prices.title')}>
+        <SectionCard stagger={120} title={t('sizing.prices.title')}>
           <div className="grid gap-4 md:grid-cols-2">
             <InputRow inputMode="decimal" label={t('sizing.input.entry')} onChange={setEntryPrice} tone="accent" type="number" unit={currencyUnit} value={entryPrice} />
             <InputRow inputMode="decimal" label={t('sizing.input.stop')} onChange={setStopPrice} tone="loss" type="number" unit={currencyUnit} value={stopPrice} />

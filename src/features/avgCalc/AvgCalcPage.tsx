@@ -226,7 +226,6 @@ export function AvgCalcPage() {
             </ActionButton>
           }
           description={t('avg.card.description')}
-          eyebrow={t('avg.card.eyebrow')}
           stagger={60}
           title={t('avg.card.title')}
         >
@@ -261,10 +260,11 @@ export function AvgCalcPage() {
           </div>
         </SectionCard>
 
-        <SectionCard eyebrow={t('common.section.targets')} stagger={120} title={t('avg.targets.title')}>
+        <SectionCard stagger={120} title={t('avg.targets.title')}>
           <div className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-4 rounded-[var(--radius-control)] border border-[color:var(--color-border-subtle)] bg-black/10 p-4">
+            <div className="space-y-4">
               <SegmentedControl
+                className="hidden sm:grid"
                 onChange={(value) => setStopConfig({ mode: value })}
                 options={[
                   { label: t('avg.stop.modePct'), value: 'pct' },
@@ -277,7 +277,13 @@ export function AvgCalcPage() {
                 error={stopError ?? undefined}
                 inputMode="decimal"
                 label={t('avg.input.stopValue')}
+                modeOptions={[
+                  { label: t('avg.stop.modePct'), value: 'pct' },
+                  { label: t('avg.stop.modeAmount'), value: 'amount' },
+                ]}
+                modeValue={stopConfig.mode}
                 onChange={(value) => setStopConfig({ value })}
+                onModeChange={(value) => setStopConfig({ mode: value as 'pct' | 'amount' })}
                 placeholder="0"
                 tone="loss"
                 type="number"
@@ -286,8 +292,9 @@ export function AvgCalcPage() {
               />
             </div>
 
-            <div className="space-y-4 rounded-[var(--radius-control)] border border-[color:var(--color-border-subtle)] bg-black/10 p-4">
+            <div className="space-y-4">
               <SegmentedControl
+                className="hidden sm:grid"
                 onChange={(value) => setTakeConfig({ mode: value })}
                 options={[
                   { label: t('avg.take.modePct'), value: 'pct' },
@@ -300,7 +307,13 @@ export function AvgCalcPage() {
                 error={takeError ?? undefined}
                 inputMode="decimal"
                 label={t('avg.input.takeValue')}
+                modeOptions={[
+                  { label: t('avg.take.modePct'), value: 'pct' },
+                  { label: t('avg.take.modeAmount'), value: 'amount' },
+                ]}
+                modeValue={takeConfig.mode}
                 onChange={(value) => setTakeConfig({ value })}
+                onModeChange={(value) => setTakeConfig({ mode: value as 'pct' | 'amount' })}
                 placeholder="0"
                 tone="profit"
                 type="number"
@@ -311,7 +324,7 @@ export function AvgCalcPage() {
           </div>
         </SectionCard>
 
-        <SectionCard eyebrow={t('common.section.markPrice')} stagger={180} title={t('avg.mark.title')}>
+        <SectionCard stagger={180} title={t('avg.mark.title')}>
           <InputRow
             error={currentPriceError ?? undefined}
             inputMode="decimal"

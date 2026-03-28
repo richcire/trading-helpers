@@ -43,6 +43,8 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
     'header.kicker': 'Trading Desk Toolkit',
     'header.title': 'Trading Helpers',
     'header.openSettings': 'Open global settings',
+    'header.openMenu': 'Open menu',
+    'header.closeMenu': 'Close menu',
 
     'common.close': 'Close',
     'common.resetInputs': 'Reset current inputs',
@@ -73,7 +75,6 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
 
     'tooltip.view': 'View formula for {label}',
 
-    'settings.eyebrow': 'Global Settings',
     'settings.title': 'Global Calculation Profile',
     'settings.description': 'Keep fee handling and leverage assumptions consistent across all calculators.',
     'settings.close': 'Close settings',
@@ -107,7 +108,6 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
     'validation.avg.takeAmount': 'Take-profit amount must be greater than 0.',
     'validation.avg.current': 'Mark price must be greater than 0.',
 
-    'avg.card.eyebrow': 'Average Entry',
     'avg.card.title': 'Average + Stop/Take',
     'avg.card.description': 'Calculate average entry and instantly review stop, take, and mark-based PnL.',
     'avg.targets.title': 'Stop / Take Settings',
@@ -238,7 +238,6 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
     'exp.curve.tooltipTitle': 'Breakeven Curve',
     'exp.judgement.formula': 'expectancy > 0 = positive / < 0 = negative / = 0 = neutral',
 
-    'docs.quick.eyebrow': 'Quick Start',
     'docs.quick.title': 'Get Productive in 4 Steps',
     'docs.quick.description': 'A minimal setup flow that works for most spot and futures traders.',
     'docs.quick.step1': 'Open Global Settings and set your display currency, leverage, and fee assumptions first.',
@@ -246,7 +245,6 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
     'docs.quick.step3': 'Fill required inputs only; optional fields are for scenario checks such as current mark or target levels.',
     'docs.quick.step4': 'Read results as a decision aid, then compare with your exchange order constraints before execution.',
 
-    'docs.tools.eyebrow': 'Feature Guide',
     'docs.tools.title': 'How To Use Each Calculator',
     'docs.tools.description': 'Start from your objective, then follow these input and interpretation tips.',
     'docs.tools.avg.title': 'Average Price + Stop/Take',
@@ -275,7 +273,6 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
     'docs.tools.exp.b2': 'Check expectancy and breakeven win rate together instead of only one metric.',
     'docs.tools.exp.b3': 'Treat near-zero expectancy as unstable and validate with larger sample quality.',
 
-    'docs.interpret.eyebrow': 'Interpretation Tips',
     'docs.interpret.title': 'Read Results Correctly',
     'docs.interpret.description': 'Use these rules to avoid misreading outputs during fast decision cycles.',
     'docs.interpret.cardTitle': 'Metric Reading Rules',
@@ -331,6 +328,8 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
     'header.kicker': 'Trading Desk Toolkit',
     'header.title': 'Trading Helpers',
     'header.openSettings': '전역 설정 열기',
+    'header.openMenu': '메뉴 열기',
+    'header.closeMenu': '메뉴 닫기',
 
     'common.close': '닫기',
     'common.resetInputs': '현재 입력 초기화',
@@ -361,7 +360,6 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
 
     'tooltip.view': '{label} 계산식 보기',
 
-    'settings.eyebrow': 'Global Settings',
     'settings.title': '공통 계산 환경',
     'settings.description': '수수료 반영 방식과 레버리지 기준을 전역으로 통일합니다.',
     'settings.close': '설정 닫기',
@@ -395,7 +393,6 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
     'validation.avg.takeAmount': '익절 금액은 0보다 커야 합니다',
     'validation.avg.current': '현재가는 0보다 커야 합니다',
 
-    'avg.card.eyebrow': 'Average Entry',
     'avg.card.title': '평균단가 + 손절/익절',
     'avg.card.description': '분할 진입 평균단가를 계산하고 같은 기준으로 손절, 익절, 현재 손익을 즉시 확인합니다.',
     'avg.targets.title': '손절 / 익절 설정',
@@ -526,7 +523,6 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
     'exp.curve.tooltipTitle': '손익분기 승률 곡선',
     'exp.judgement.formula': 'expectancy > 0 = 양의 기대값 / < 0 = 음의 기대값 / = 0 = 중립',
 
-    'docs.quick.eyebrow': '빠른 시작',
     'docs.quick.title': '4단계로 빠르게 시작하기',
     'docs.quick.description': '대부분의 현물/선물 트레이더가 바로 쓸 수 있는 최소 설정 흐름입니다.',
     'docs.quick.step1': '먼저 전역 설정에서 기준 통화, 레버리지, 수수료 가정을 맞춥니다.',
@@ -534,7 +530,6 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
     'docs.quick.step3': '필수 입력부터 채우고, 현재가/목표가 같은 선택 입력으로 시나리오를 확장합니다.',
     'docs.quick.step4': '결과를 의사결정 보조로 사용하고, 실제 주문 전 거래소 제약 조건을 함께 확인합니다.',
 
-    'docs.tools.eyebrow': '기능별 가이드',
     'docs.tools.title': '계산기별 사용법',
     'docs.tools.description': '목적부터 정한 뒤 입력 순서와 해석 포인트를 따라가세요.',
     'docs.tools.avg.title': '평균단가 + 손절/익절',
@@ -563,7 +558,6 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
     'docs.tools.exp.b2': '기대값과 손익분기 승률을 항상 함께 보고 단일 지표 판단을 피합니다.',
     'docs.tools.exp.b3': '0 근처 기대값은 불안정할 수 있으므로 표본 품질을 함께 검토합니다.',
 
-    'docs.interpret.eyebrow': '결과 해석 팁',
     'docs.interpret.title': '결과를 정확히 읽는 법',
     'docs.interpret.description': '빠른 의사결정 상황에서 출력값을 오해하지 않기 위한 기준입니다.',
     'docs.interpret.cardTitle': '지표 해석 규칙',
@@ -619,6 +613,8 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
     'header.kicker': 'Trading Desk Toolkit',
     'header.title': 'Trading Helpers',
     'header.openSettings': 'グローバル設定を開く',
+    'header.openMenu': 'メニューを開く',
+    'header.closeMenu': 'メニューを閉じる',
 
     'common.close': '閉じる',
     'common.resetInputs': '入力をリセット',
@@ -649,7 +645,6 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
 
     'tooltip.view': '{label} の計算式を見る',
 
-    'settings.eyebrow': 'Global Settings',
     'settings.title': '共通計算設定',
     'settings.description': '手数料反映方式とレバレッジ基準を全体で統一します。',
     'settings.close': '設定を閉じる',
@@ -683,7 +678,6 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
     'validation.avg.takeAmount': '利確金額は0より大きい必要があります。',
     'validation.avg.current': '現在価格は0より大きい必要があります。',
 
-    'avg.card.eyebrow': 'Average Entry',
     'avg.card.title': '平均単価 + 損切り/利確',
     'avg.card.description': '平均単価を計算し、同じ基準で損切り・利確・現在損益を確認します。',
     'avg.targets.title': '損切り / 利確設定',
@@ -814,7 +808,6 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
     'exp.curve.tooltipTitle': '損益分岐勝率カーブ',
     'exp.judgement.formula': 'expectancy > 0 = positive / < 0 = negative / = 0 = neutral',
 
-    'docs.quick.eyebrow': 'クイックスタート',
     'docs.quick.title': '4ステップですぐ使う',
     'docs.quick.description': '多くの現物/先物トレーダーでそのまま使える最小セットアップです。',
     'docs.quick.step1': 'まずグローバル設定で表示通貨、レバレッジ、手数料前提を合わせます。',
@@ -822,7 +815,6 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
     'docs.quick.step3': '必須入力を先に埋め、現在価格や目標価格などの任意入力でシナリオを広げます。',
     'docs.quick.step4': '結果は意思決定補助として使い、発注前に取引所制約も必ず確認します。',
 
-    'docs.tools.eyebrow': '機能ガイド',
     'docs.tools.title': '計算機ごとの使い方',
     'docs.tools.description': '目的から逆算して、入力順と解釈ポイントを確認してください。',
     'docs.tools.avg.title': '平均単価 + 損切り/利確',
@@ -851,7 +843,6 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
     'docs.tools.exp.b2': '期待値と損益分岐勝率を常にセットで確認します。',
     'docs.tools.exp.b3': '0付近の期待値は不安定なのでサンプル品質も併せて確認します。',
 
-    'docs.interpret.eyebrow': '読み取りのコツ',
     'docs.interpret.title': '結果を正しく解釈する',
     'docs.interpret.description': '短時間判断で出力を誤読しないための実務ルールです。',
     'docs.interpret.cardTitle': '指標の読み方',

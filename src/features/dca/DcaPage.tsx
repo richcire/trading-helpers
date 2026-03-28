@@ -126,7 +126,6 @@ export function DcaPage() {
             </ActionButton>
           }
           description={t('dca.card.description')}
-          eyebrow="DCA"
           stagger={60}
           title={t('dca.card.title')}
         >
@@ -148,7 +147,7 @@ export function DcaPage() {
           </div>
         </SectionCard>
 
-        <SectionCard eyebrow={t('common.section.addPosition')} stagger={120} title={t('dca.add.title')}>
+        <SectionCard stagger={120} title={t('dca.add.title')}>
           <div className="space-y-4">
             <SegmentedControl
               onChange={setAddMode}
@@ -169,7 +168,7 @@ export function DcaPage() {
           </div>
         </SectionCard>
 
-        <SectionCard eyebrow={t('common.section.markPrice')} stagger={180} title={t('dca.mark.title')}>
+        <SectionCard stagger={180} title={t('dca.mark.title')}>
           <InputRow inputMode="decimal" label={t('dca.input.currentPrice')} onChange={setCurrentPrice} tone="warning" type="number" unit={currencyUnit} value={currentPrice} />
         </SectionCard>
       </div>

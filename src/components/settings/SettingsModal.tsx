@@ -56,7 +56,7 @@ export function SettingsModal({ onClose }: Props) {
   }, [onClose])
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm sm:items-center sm:p-6">
+    <div className="animate-backdrop-in fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm sm:items-center sm:p-6">
       <button
         aria-label={t('settings.close')}
         className="absolute inset-0 cursor-pointer"
@@ -69,9 +69,8 @@ export function SettingsModal({ onClose }: Props) {
             {t('common.close')}
           </ActionButton>
         }
-        className="relative z-10 w-full max-w-2xl max-sm:rounded-b-none max-sm:rounded-t-[20px]"
+        className="relative z-10 w-full max-w-2xl max-sm:rounded-b-none max-sm:rounded-t-[20px] max-sm:animate-sheet-up sm:animate-modal-scale"
         description={t('settings.description')}
-        eyebrow={t('settings.eyebrow')}
         surface="overlay"
         title={t('settings.title')}
       >

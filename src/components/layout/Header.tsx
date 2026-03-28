@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { IconButton } from '../ui/IconButton'
 import { StatusDot } from '../ui/StatusDot'
 import { useI18n } from '../../i18n'
@@ -5,11 +6,12 @@ import { NavLink } from 'react-router-dom'
 
 interface Props {
   onSettingsClick: () => void
+  onMenuClick: () => void
   docsPath: string
   docsLabel: string
 }
 
-export function Header({ docsLabel, docsPath, onSettingsClick }: Props) {
+export function Header({ docsLabel, docsPath, onMenuClick, onSettingsClick }: Props) {
   const { t } = useI18n()
 
   return (
@@ -29,11 +31,24 @@ export function Header({ docsLabel, docsPath, onSettingsClick }: Props) {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <IconButton className="sm:hidden" label={t('header.openMenu')} onClick={onMenuClick}>
+            <svg aria-hidden="true" className="size-5" fill="none" viewBox="0 0 24 24">
+              <path
+                d="M3 6h18M3 12h18M3 18h18"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeWidth="1.5"
+              />
+            </svg>
+          </IconButton>
           <NavLink
             className={({ isActive }) =>
-              isActive
-                ? 'inline-flex min-h-9 sm:min-h-10 items-center rounded-[var(--radius-pill)] border border-[rgba(82,199,222,0.3)] bg-[color:var(--color-accent-soft)] px-2.5 sm:px-3 text-xs sm:text-sm font-semibold text-[color:var(--color-accent)] transition duration-200 ease-out'
-                : 'inline-flex min-h-9 sm:min-h-10 items-center rounded-[var(--radius-pill)] border border-transparent px-2.5 sm:px-3 text-xs sm:text-sm font-semibold text-[color:var(--color-text-muted)] transition duration-200 ease-out hover:bg-white/6 hover:text-[color:var(--color-text-primary)]'
+              clsx(
+                'hidden sm:inline-flex min-h-9 sm:min-h-10 items-center rounded-[var(--radius-pill)] border px-2.5 sm:px-3 text-xs sm:text-sm font-semibold transition duration-200 ease-out',
+                isActive
+                  ? 'border-[rgba(82,199,222,0.3)] bg-[color:var(--color-accent-soft)] text-[color:var(--color-accent)]'
+                  : 'border-transparent text-[color:var(--color-text-muted)] hover:bg-white/6 hover:text-[color:var(--color-text-primary)]',
+              )
             }
             to={docsPath}
           >

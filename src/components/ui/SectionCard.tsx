@@ -6,7 +6,6 @@ import type { SurfaceLevel, Tone } from '../../types'
 
 interface Props {
   title?: string
-  eyebrow?: string
   description?: string
   actions?: ReactNode
   children: ReactNode
@@ -27,7 +26,7 @@ const toneClasses: Record<Tone, string> = {
 const surfaceClasses: Record<SurfaceLevel, string> = {
   base: 'panel-surface',
   raised: 'panel-elevated',
-  overlay: 'panel-elevated bg-[rgba(18,35,44,0.95)] backdrop-blur-xl',
+  overlay: 'panel-elevated bg-[rgba(18,35,44,0.95)]',
 }
 
 export function SectionCard({
@@ -35,7 +34,6 @@ export function SectionCard({
   children,
   className,
   description,
-  eyebrow,
   stagger,
   surface = 'base',
   title,
@@ -47,7 +45,7 @@ export function SectionCard({
   return (
     <section
       className={clsx(
-        'rounded-[var(--radius-panel)] p-4 sm:p-6',
+        'rounded-[var(--radius-panel)] px-4 pb-4 pt-3.5 sm:px-6 sm:pb-6 sm:pt-5',
         surfaceClasses[surface],
         toneClasses[tone],
         shouldAnimate && 'animate-card-in',
@@ -55,18 +53,15 @@ export function SectionCard({
       )}
       style={shouldAnimate ? { '--stagger': `${stagger}ms` } as React.CSSProperties : undefined}
     >
-      {(eyebrow || title || description || actions) && (
-        <div className="mb-4 sm:mb-5 flex items-start justify-between gap-3 sm:gap-4">
-          <div className="space-y-1.5">
-            {eyebrow && (
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--color-text-muted)]">
-                {eyebrow}
-              </p>
-            )}
-            {title && <h2 className="text-lg font-semibold tracking-[-0.03em] text-[color:var(--color-text-primary)]">{title}</h2>}
-            {description && <p className="max-w-2xl text-sm text-[color:var(--color-text-secondary)]">{description}</p>}
-          </div>
-          {actions && <div className="shrink-0">{actions}</div>}
+      {(title || description || actions) && (
+        <div className="mb-3 sm:mb-4 space-y-1.5">
+          {(title || actions) && (
+            <div className="flex items-center justify-between gap-3 sm:gap-4">
+              {title && <h2 className="text-lg font-semibold tracking-[-0.03em] text-[color:var(--color-text-primary)]">{title}</h2>}
+              {actions && <div className="shrink-0">{actions}</div>}
+            </div>
+          )}
+          {description && <p className="max-w-2xl text-sm text-[color:var(--color-text-secondary)]">{description}</p>}
         </div>
       )}
       {children}

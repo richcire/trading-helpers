@@ -13,7 +13,7 @@ interface Props<T extends string> {
 
 export function TabNav<T extends string>({ tabs }: Props<T>) {
   return (
-    <nav className="px-4 pb-3 pt-2 sm:px-6">
+    <nav className="hidden sm:block px-4 pb-3 pt-2 sm:px-6">
       <div className="scroll-fade-x scrollbar-hidden flex gap-1.5 sm:gap-2 overflow-x-auto">
         {tabs.map((tab) => {
           return (
