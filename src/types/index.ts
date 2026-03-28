@@ -4,6 +4,8 @@ export type InputMode = 'qty' | 'amount'
 
 export type StopTakeMode = 'pct' | 'amount'
 
+export type MarketType = 'stock' | 'fx'
+
 export type Tone = 'neutral' | 'accent' | 'profit' | 'loss' | 'warning'
 
 export type SurfaceLevel = 'base' | 'raised' | 'overlay'
@@ -37,6 +39,7 @@ export interface Settings {
   feeExitPct: number
   includeFeesInPnL: boolean
   adjustStopTakePriceForFees: boolean
+  marketType: MarketType
 }
 
 export interface EntryRow {

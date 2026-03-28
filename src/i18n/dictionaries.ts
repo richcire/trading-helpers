@@ -36,6 +36,10 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
     'app.route.docs.introTitle': 'Documentation',
     'app.route.docs.introDescription': 'Quick-start guides for first-time users with practical workflows for all calculators.',
 
+    'timeline.dst.us': 'US DST',
+    'timeline.dst.uk': 'UK DST',
+    'timeline.dst.both': 'US·UK DST',
+
     'header.kicker': 'Trading Desk Toolkit',
     'header.title': 'Trading Helpers',
     'header.openSettings': 'Open global settings',
@@ -320,6 +324,10 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
     'app.route.docs.introTitle': '문서',
     'app.route.docs.introDescription': '처음 사용자도 바로 활용할 수 있도록 계산기별 실전 사용 흐름을 정리했습니다.',
 
+    'timeline.dst.us': 'US 썸머타임',
+    'timeline.dst.uk': 'UK 썸머타임',
+    'timeline.dst.both': 'US·UK 썸머타임',
+
     'header.kicker': 'Trading Desk Toolkit',
     'header.title': 'Trading Helpers',
     'header.openSettings': '전역 설정 열기',
@@ -603,6 +611,10 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
     'app.route.docs.description': '各計算機の使い方、結果の読み方、よくある入力ミスをまとめて確認できます。',
     'app.route.docs.introTitle': 'ドキュメント',
     'app.route.docs.introDescription': '初回ユーザー向けに、各計算機の実践的な利用フローを整理しました。',
+
+    'timeline.dst.us': 'US サマータイム',
+    'timeline.dst.uk': 'UK サマータイム',
+    'timeline.dst.both': 'US·UK サマータイム',
 
     'header.kicker': 'Trading Desk Toolkit',
     'header.title': 'Trading Helpers',

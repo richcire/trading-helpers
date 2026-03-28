@@ -12,6 +12,7 @@ interface Props {
   tone?: Tone
   surface?: SurfaceLevel
   className?: string
+  stagger?: number
 }
 
 const toneClasses: Record<Tone, string> = {
@@ -34,6 +35,7 @@ export function SectionCard({
   className,
   description,
   eyebrow,
+  stagger,
   surface = 'base',
   title,
   tone = 'neutral',
@@ -44,8 +46,10 @@ export function SectionCard({
         'rounded-[var(--radius-panel)] p-5 sm:p-6',
         surfaceClasses[surface],
         toneClasses[tone],
+        typeof stagger === 'number' && 'animate-card-in',
         className,
       )}
+      style={typeof stagger === 'number' ? { '--stagger': `${stagger}ms` } as React.CSSProperties : undefined}
     >
       {(eyebrow || title || description || actions) && (
         <div className="mb-5 flex items-start justify-between gap-4">

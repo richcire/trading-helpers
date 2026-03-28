@@ -120,6 +120,7 @@ export function SizingPage() {
           }
           description={t('sizing.card.description')}
           eyebrow={t('sizing.card.title')}
+          stagger={60}
           title={t('sizing.card.title')}
         >
           <div className="space-y-4">
@@ -158,7 +159,7 @@ export function SizingPage() {
           </div>
         </SectionCard>
 
-        <SectionCard eyebrow={t('common.section.prices')} title={t('sizing.prices.title')}>
+        <SectionCard eyebrow={t('common.section.prices')} stagger={120} title={t('sizing.prices.title')}>
           <div className="grid gap-4 md:grid-cols-2">
             <InputRow inputMode="decimal" label={t('sizing.input.entry')} onChange={setEntryPrice} tone="accent" type="number" unit={currencyUnit} value={entryPrice} />
             <InputRow inputMode="decimal" label={t('sizing.input.stop')} onChange={setStopPrice} tone="loss" type="number" unit={currencyUnit} value={stopPrice} />
@@ -169,7 +170,7 @@ export function SizingPage() {
         </SectionCard>
       </div>
 
-      <ResultCard title={t('sizing.result.title')}>
+      <ResultCard stagger={100} title={t('sizing.result.title')}>
         {result && tooltips ? (
           <div>
             <div className="mb-5">

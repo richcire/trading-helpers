@@ -227,6 +227,7 @@ export function AvgCalcPage() {
           }
           description={t('avg.card.description')}
           eyebrow={t('avg.card.eyebrow')}
+          stagger={60}
           title={t('avg.card.title')}
         >
           <div className="space-y-4">
@@ -260,7 +261,7 @@ export function AvgCalcPage() {
           </div>
         </SectionCard>
 
-        <SectionCard eyebrow={t('common.section.targets')} title={t('avg.targets.title')}>
+        <SectionCard eyebrow={t('common.section.targets')} stagger={120} title={t('avg.targets.title')}>
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-4 rounded-[var(--radius-control)] border border-[color:var(--color-border-subtle)] bg-black/10 p-4">
               <SegmentedControl
@@ -310,7 +311,7 @@ export function AvgCalcPage() {
           </div>
         </SectionCard>
 
-        <SectionCard eyebrow={t('common.section.markPrice')} title={t('avg.mark.title')}>
+        <SectionCard eyebrow={t('common.section.markPrice')} stagger={180} title={t('avg.mark.title')}>
           <InputRow
             error={currentPriceError ?? undefined}
             inputMode="decimal"
@@ -328,6 +329,7 @@ export function AvgCalcPage() {
       <div className="space-y-5">
         <ResultCard
           actions={<CopyButton text={summaryText} />}
+          stagger={100}
           title={t('avg.summary.title')}
         >
           {result && tooltips ? (
@@ -355,7 +357,7 @@ export function AvgCalcPage() {
           )}
         </ResultCard>
 
-        <ResultCard title={t('avg.stopTake.title')}>
+        <ResultCard stagger={160} title={t('avg.stopTake.title')}>
           {result && tooltips ? (
             <div>
               <MetricRow label={t('avg.metric.stopPrice')} tone="loss" tooltip={tooltips.stopPrice} value={formatCurrencyValue(result.stopPrice, settings.currency)} />
@@ -370,7 +372,7 @@ export function AvgCalcPage() {
           )}
         </ResultCard>
 
-        <ResultCard title={t('avg.current.title')}>
+        <ResultCard stagger={220} title={t('avg.current.title')}>
           {result?.currentPnl && tooltips?.currentAmount && tooltips.currentPct ? (
             <div>
               <div className="flex items-center justify-between gap-3">

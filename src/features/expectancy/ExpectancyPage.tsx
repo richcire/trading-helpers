@@ -136,6 +136,7 @@ export function ExpectancyPage() {
           }
           description={t('exp.card.description')}
           eyebrow={t('common.section.expectancy')}
+          stagger={60}
           title={t('exp.card.title')}
         >
           <div className="space-y-4">
@@ -159,7 +160,7 @@ export function ExpectancyPage() {
           </div>
         </SectionCard>
 
-        <ResultCard title={t('exp.result.title')}>
+        <ResultCard stagger={100} title={t('exp.result.title')}>
           {result && tooltips ? (
             <div>
               <div className="mb-5">
@@ -182,7 +183,7 @@ export function ExpectancyPage() {
         </ResultCard>
       </div>
 
-      <SectionCard eyebrow={t('common.section.curve')} title={t('exp.curve.title')}>
+      <SectionCard eyebrow={t('common.section.curve')} stagger={160} title={t('exp.curve.title')}>
         <div className="h-[320px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={curvePoints} margin={{ top: 12, right: 8, bottom: 4, left: 0 }}>

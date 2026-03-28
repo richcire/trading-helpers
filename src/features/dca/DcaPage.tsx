@@ -127,6 +127,7 @@ export function DcaPage() {
           }
           description={t('dca.card.description')}
           eyebrow="DCA"
+          stagger={60}
           title={t('dca.card.title')}
         >
           <div className="space-y-4">
@@ -147,7 +148,7 @@ export function DcaPage() {
           </div>
         </SectionCard>
 
-        <SectionCard eyebrow={t('common.section.addPosition')} title={t('dca.add.title')}>
+        <SectionCard eyebrow={t('common.section.addPosition')} stagger={120} title={t('dca.add.title')}>
           <div className="space-y-4">
             <SegmentedControl
               onChange={setAddMode}
@@ -168,13 +169,13 @@ export function DcaPage() {
           </div>
         </SectionCard>
 
-        <SectionCard eyebrow={t('common.section.markPrice')} title={t('dca.mark.title')}>
+        <SectionCard eyebrow={t('common.section.markPrice')} stagger={180} title={t('dca.mark.title')}>
           <InputRow inputMode="decimal" label={t('dca.input.currentPrice')} onChange={setCurrentPrice} tone="warning" type="number" unit={currencyUnit} value={currentPrice} />
         </SectionCard>
       </div>
 
       <div className="space-y-5">
-        <ResultCard title={t('dca.result.title')}>
+        <ResultCard stagger={100} title={t('dca.result.title')}>
           {result && tooltips ? (
             <div>
               <div className="mb-5">
@@ -203,7 +204,7 @@ export function DcaPage() {
           )}
         </ResultCard>
 
-        <ResultCard title={t('dca.current.title')}>
+        <ResultCard stagger={160} title={t('dca.current.title')}>
           {result?.currentPnl && tooltips?.currentAmount && tooltips.currentPct ? (
             <div>
               <div className="flex items-center justify-between gap-4">

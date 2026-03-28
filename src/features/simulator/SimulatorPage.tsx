@@ -110,6 +110,7 @@ export function SimulatorPage() {
           }
           description={t('sim.card.description')}
           eyebrow={t('common.section.simulation')}
+          stagger={60}
           title={t('sim.card.title')}
         >
           <div className="space-y-4">
@@ -143,7 +144,7 @@ export function SimulatorPage() {
           </div>
         </SectionCard>
 
-        <ResultCard title={t('sim.result.title')}>
+        <ResultCard stagger={100} title={t('sim.result.title')}>
           {points.length > 0 && tooltips ? (
             <div>
               <MetricRow label={t('sim.metric.points')} tooltip={tooltips.dataPoints} value={String(points.length)} />
@@ -158,7 +159,7 @@ export function SimulatorPage() {
         </ResultCard>
       </div>
 
-      <SectionCard eyebrow={t('common.section.chart')} title={t('sim.chart.title')}>
+      <SectionCard eyebrow={t('common.section.chart')} stagger={160} title={t('sim.chart.title')}>
         {points.length > 0 ? (
           <SimChart
             avgPrice={parsePositiveNumber(avgPrice)}

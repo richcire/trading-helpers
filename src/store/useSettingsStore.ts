@@ -12,6 +12,7 @@ export const DEFAULT_SETTINGS: Settings = {
   feeExitPct: 0,
   includeFeesInPnL: true,
   adjustStopTakePriceForFees: false,
+  marketType: 'stock',
 }
 
 interface SettingsStore {

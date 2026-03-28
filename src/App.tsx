@@ -4,6 +4,7 @@ import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { Header } from "./components/layout/Header";
 import { TabNav } from "./components/layout/TabNav";
 import { SettingsModal } from "./components/settings/SettingsModal";
+import { SessionTimeline } from "./components/timeline/SessionTimeline";
 import { AvgCalcPage } from "./features/avgCalc/AvgCalcPage";
 import { DcaPage } from "./features/dca/DcaPage";
 import { DocsPage } from "./features/docs/DocsPage";
@@ -181,11 +182,12 @@ export default function App() {
         </div>
       </div>
       <main className="mx-auto w-full max-w-[var(--container-wide)] px-4 py-6 sm:px-6 sm:py-8">
-        <section className="mb-6 rounded-[var(--radius-card)] border border-white/8 bg-[color:var(--surface-base)] px-5 py-4">
+        <SessionTimeline />
+        <section className="animate-card-in mb-6 rounded-[var(--radius-panel)] border-l-2 border-l-[color:var(--color-accent)] panel-surface px-5 py-4">
           <h2 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[color:var(--color-text-primary)]">
             {currentRoute.introTitle}
           </h2>
-          <p className="mt-2 text-sm text-[color:var(--color-text-secondary)]">
+          <p className="mt-2 text-sm leading-relaxed text-[color:var(--color-text-secondary)]">
             {currentRoute.introDescription}
           </p>
         </section>
@@ -201,6 +203,12 @@ export default function App() {
           <Route element={<Navigate replace to="/avg-price" />} path="*" />
         </Routes>
       </main>
+      <footer className="mx-auto w-full max-w-[var(--container-wide)] px-4 pb-8 pt-4 sm:px-6">
+        <div className="h-px bg-gradient-to-r from-transparent via-[color:var(--color-border-subtle)] to-transparent" />
+        <p className="mt-4 text-center text-xs tracking-[0.04em] text-[color:var(--color-text-muted)]">
+          Trading Helpers &middot; {new Date().getFullYear()}
+        </p>
+      </footer>
       {settingsOpen && <SettingsModal onClose={() => setSettingsOpen(false)} />}
     </div>
   );

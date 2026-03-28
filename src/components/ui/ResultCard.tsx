@@ -11,18 +11,20 @@ interface Props {
   tone?: Tone
   surface?: SurfaceLevel
   actions?: ReactNode
+  stagger?: number
 }
 
 export function ResultCard({
   actions,
   children,
   className,
-  surface = 'base',
+  surface = 'raised',
+  stagger,
   title,
-  tone = 'neutral',
+  tone = 'accent',
 }: Props) {
   return (
-    <SectionCard actions={actions} className={className} surface={surface} title={title} tone={tone}>
+    <SectionCard actions={actions} className={className} stagger={stagger} surface={surface} title={title} tone={tone}>
       <CalculationTooltipProvider>{children}</CalculationTooltipProvider>
     </SectionCard>
   )

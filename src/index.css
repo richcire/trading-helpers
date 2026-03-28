@@ -3,6 +3,7 @@
 :root {
   color-scheme: dark;
   font-family:
+    "Outfit",
     "SF Pro Display",
     "SF Pro Text",
     "Apple SD Gothic Neo",
@@ -15,6 +16,9 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --font-display: "Outfit", "SF Pro Display", sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
 
   --color-bg-app: #071117;
   --color-bg-surface: #0d1a21;
@@ -55,12 +59,22 @@
 
 @theme inline {
   --font-sans:
+    "Outfit",
     "SF Pro Display",
     "SF Pro Text",
     "Apple SD Gothic Neo",
     "Pretendard",
     "Segoe UI",
     sans-serif;
+  --font-display:
+    "Outfit",
+    "SF Pro Display",
+    sans-serif;
+  --font-mono:
+    "JetBrains Mono",
+    "SF Mono",
+    "Fira Code",
+    monospace;
   --color-app: var(--color-bg-app);
   --color-surface: var(--color-bg-surface);
   --color-elevated: var(--color-bg-elevated);
@@ -85,8 +99,11 @@
   html {
     min-width: 320px;
     background:
-      radial-gradient(circle at top, rgba(82, 199, 222, 0.08), transparent 28%),
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"),
+      radial-gradient(ellipse 60% 50% at 20% 100%, rgba(62, 213, 152, 0.04), transparent),
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(82, 199, 222, 0.12), transparent 50%),
       linear-gradient(180deg, #09151c 0%, #071117 100%);
+    background-attachment: fixed;
   }
 
   body {
@@ -99,6 +116,10 @@
 
   body.modal-open {
     overflow: hidden;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
   }
 
   a {
@@ -144,8 +165,38 @@
   }
 
   .text-data {
+    font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum" 1;
+  }
+
+  @keyframes timeline-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  @keyframes fadeSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-card-in {
+    animation: fadeSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: var(--stagger, 0ms);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-card-in {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
   }
 
   .scrollbar-hidden {
