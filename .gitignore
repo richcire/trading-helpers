@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment variables
+.env*
+
+# Internal docs
+agents.md
+design_system.md
+trading_service_spec_v1.md

@@ -14,14 +14,14 @@ interface Props<T extends string> {
 export function TabNav<T extends string>({ tabs }: Props<T>) {
   return (
     <nav className="px-4 pb-3 pt-2 sm:px-6">
-      <div className="scrollbar-hidden flex gap-2 overflow-x-auto">
+      <div className="scroll-fade-x scrollbar-hidden flex gap-1.5 sm:gap-2 overflow-x-auto">
         {tabs.map((tab) => {
           return (
             <NavLink
               key={tab.id}
               className={({ isActive }) =>
                 clsx(
-                  'relative flex min-h-11 shrink-0 items-center rounded-[var(--radius-pill)] border px-4 py-2 text-sm font-semibold tracking-[-0.01em] transition duration-200 ease-out focus-visible:outline-none',
+                  'relative flex min-h-10 sm:min-h-11 shrink-0 items-center rounded-[var(--radius-pill)] border px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold tracking-[-0.01em] transition duration-200 ease-out focus-visible:outline-none',
                   isActive
                     ? 'border-[rgba(82,199,222,0.3)] bg-[color:var(--color-accent-soft)] text-[color:var(--color-accent)]'
                     : 'border-transparent bg-transparent text-[color:var(--color-text-muted)] hover:bg-white/6 hover:text-[color:var(--color-text-primary)]',

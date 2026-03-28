@@ -117,8 +117,8 @@ export function DcaPage() {
   }, [addAmount, addMode, addPrice, addQty, currentPrice, direction, oldAvgPrice, oldQty, result, settings.currency, t])
 
   return (
-    <div className="grid gap-5 xl:grid-cols-[1.05fr_0.95fr]">
-      <div className="space-y-5">
+    <div className="grid gap-3 sm:gap-5 xl:grid-cols-[1.05fr_0.95fr]">
+      <div className="space-y-3 sm:space-y-5">
         <SectionCard
           actions={
             <ActionButton onClick={reset} tone="warning" variant="outline">
@@ -174,7 +174,7 @@ export function DcaPage() {
         </SectionCard>
       </div>
 
-      <div className="space-y-5">
+      <div className="space-y-3 sm:space-y-5">
         <ResultCard stagger={100} title={t('dca.result.title')}>
           {result && tooltips ? (
             <div>

@@ -39,7 +39,7 @@ export function SegmentedControl<T extends string>({
         : 'grid-cols-2'
 
   return (
-    <div className={clsx('grid min-h-11 gap-2 rounded-[var(--radius-control)] border border-[color:var(--color-border-subtle)] bg-black/10 p-1', gridColsClass, className)}>
+    <div className={clsx('grid min-h-10 sm:min-h-11 gap-1 sm:gap-2 rounded-[var(--radius-control)] border border-[color:var(--color-border-subtle)] bg-black/10 p-1', gridColsClass, className)}>
       {options.map((option) => {
         const isActive = option.value === value
 
@@ -47,7 +47,7 @@ export function SegmentedControl<T extends string>({
           <button
             key={option.value}
             className={clsx(
-              'cursor-pointer rounded-[calc(var(--radius-control)-6px)] px-3 py-2 text-sm font-semibold tracking-[-0.01em] transition duration-200 ease-out focus-visible:outline-none',
+              'cursor-pointer rounded-[calc(var(--radius-control)-6px)] px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold tracking-[-0.01em] transition duration-200 ease-out focus-visible:outline-none',
               isActive
                 ? activeToneClasses[tone]
                 : 'text-[color:var(--color-text-muted)] hover:bg-white/6 hover:text-[color:var(--color-text-primary)]',

@@ -56,7 +56,7 @@ export function SettingsModal({ onClose }: Props) {
   }, [onClose])
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-3 backdrop-blur-sm sm:items-center sm:p-6">
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm sm:items-center sm:p-6">
       <button
         aria-label={t('settings.close')}
         className="absolute inset-0 cursor-pointer"
@@ -69,12 +69,14 @@ export function SettingsModal({ onClose }: Props) {
             {t('common.close')}
           </ActionButton>
         }
-        className="relative z-10 w-full max-w-2xl"
+        className="relative z-10 w-full max-w-2xl max-sm:rounded-b-none max-sm:rounded-t-[20px]"
         description={t('settings.description')}
         eyebrow={t('settings.eyebrow')}
         surface="overlay"
         title={t('settings.title')}
       >
+        <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-white/20 sm:hidden" />
+        <div className="max-h-[60vh] overflow-y-auto overscroll-contain sm:max-h-none">
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="space-y-2.5">
             <span className="text-sm font-medium text-[color:var(--color-text-primary)]">{t('settings.language')}</span>
@@ -188,10 +190,11 @@ export function SettingsModal({ onClose }: Props) {
           </div>
         )}
 
-        <div className="mt-6 flex items-center justify-end">
+        <div className="mt-6 flex items-center justify-end pb-[env(safe-area-inset-bottom)]">
           <ActionButton onClick={handleReset} tone="warning" variant="outline">
             {t('settings.reset')}
           </ActionButton>
+        </div>
         </div>
       </SectionCard>
     </div>

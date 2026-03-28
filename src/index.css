@@ -57,6 +57,13 @@
   --transition-base: 240ms ease;
 }
 
+@media (max-width: 639px) {
+  :root {
+    --radius-panel: 16px;
+    --radius-control: 12px;
+  }
+}
+
 @theme inline {
   --font-sans:
     "Outfit",
@@ -205,5 +212,10 @@
 
   .scrollbar-hidden::-webkit-scrollbar {
     display: none;
+  }
+
+  .scroll-fade-x {
+    mask-image: linear-gradient(to right, transparent, black 12px, black calc(100% - 12px), transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 12px, black calc(100% - 12px), transparent);
   }
 }

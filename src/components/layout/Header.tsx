@@ -13,10 +13,10 @@ export function Header({ docsLabel, docsPath, onSettingsClick }: Props) {
   const { t } = useI18n()
 
   return (
-    <header className="px-4 py-4 sm:px-6">
+    <header className="px-4 py-3 sm:px-6 sm:py-4">
       <div className="flex w-full items-center justify-between gap-4">
         <div className="space-y-1">
-          <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-3">
             <StatusDot tone="accent" />
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[color:var(--color-text-muted)]">
               {t('header.kicker')}
@@ -32,8 +32,8 @@ export function Header({ docsLabel, docsPath, onSettingsClick }: Props) {
           <NavLink
             className={({ isActive }) =>
               isActive
-                ? 'inline-flex min-h-10 items-center rounded-[var(--radius-pill)] border border-[rgba(82,199,222,0.3)] bg-[color:var(--color-accent-soft)] px-3 text-sm font-semibold text-[color:var(--color-accent)] transition duration-200 ease-out'
-                : 'inline-flex min-h-10 items-center rounded-[var(--radius-pill)] border border-transparent px-3 text-sm font-semibold text-[color:var(--color-text-muted)] transition duration-200 ease-out hover:bg-white/6 hover:text-[color:var(--color-text-primary)]'
+                ? 'inline-flex min-h-9 sm:min-h-10 items-center rounded-[var(--radius-pill)] border border-[rgba(82,199,222,0.3)] bg-[color:var(--color-accent-soft)] px-2.5 sm:px-3 text-xs sm:text-sm font-semibold text-[color:var(--color-accent)] transition duration-200 ease-out'
+                : 'inline-flex min-h-9 sm:min-h-10 items-center rounded-[var(--radius-pill)] border border-transparent px-2.5 sm:px-3 text-xs sm:text-sm font-semibold text-[color:var(--color-text-muted)] transition duration-200 ease-out hover:bg-white/6 hover:text-[color:var(--color-text-primary)]'
             }
             to={docsPath}
           >

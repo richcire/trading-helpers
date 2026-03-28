@@ -75,13 +75,13 @@ export function InputRow({
   }
 
   return (
-    <div className="space-y-2.5">
+    <div className="space-y-2 sm:space-y-2.5">
       <FieldLabel htmlFor={inputId} state={state}>
         {label}
       </FieldLabel>
       <div
         className={clsx(
-          'flex min-h-12 items-center rounded-[var(--radius-control)] border bg-black/10 px-4 transition duration-200 ease-out',
+          'flex min-h-11 sm:min-h-12 items-center rounded-[var(--radius-control)] border bg-black/10 px-3 sm:px-4 transition duration-200 ease-out',
           error
             ? 'border-[rgba(255,107,122,0.6)] bg-[rgba(255,107,122,0.08)]'
             : 'border-[color:var(--color-border-subtle)]',
@@ -106,7 +106,7 @@ export function InputRow({
           <div className="ml-1 flex shrink-0 items-center gap-1">
             <button
               aria-label={t('input.decrease', { label })}
-              className="h-7 w-7 cursor-pointer rounded-[10px] border border-[color:var(--color-border-subtle)] bg-black/20 text-xs font-semibold text-[color:var(--color-text-secondary)] transition hover:border-[color:var(--color-border-strong)] hover:text-[color:var(--color-text-primary)] active:scale-95"
+              className="h-6 w-6 sm:h-7 sm:w-7 cursor-pointer rounded-[10px] border border-[color:var(--color-border-subtle)] bg-black/20 text-xs font-semibold text-[color:var(--color-text-secondary)] transition hover:border-[color:var(--color-border-strong)] hover:text-[color:var(--color-text-primary)] active:scale-95"
               onClick={() => handleStep(-1)}
               type="button"
             >
@@ -114,7 +114,7 @@ export function InputRow({
             </button>
             <button
               aria-label={t('input.increase', { label })}
-              className="h-7 w-7 cursor-pointer rounded-[10px] border border-[color:var(--color-border-subtle)] bg-black/20 text-xs font-semibold text-[color:var(--color-text-secondary)] transition hover:border-[color:var(--color-border-strong)] hover:text-[color:var(--color-text-primary)] active:scale-95"
+              className="h-6 w-6 sm:h-7 sm:w-7 cursor-pointer rounded-[10px] border border-[color:var(--color-border-subtle)] bg-black/20 text-xs font-semibold text-[color:var(--color-text-secondary)] transition hover:border-[color:var(--color-border-strong)] hover:text-[color:var(--color-text-primary)] active:scale-95"
               onClick={() => handleStep(1)}
               type="button"
             >
@@ -122,7 +122,7 @@ export function InputRow({
             </button>
           </div>
         )}
-        {unit && <span className="ml-3 shrink-0 text-xs font-medium uppercase tracking-[0.14em] text-[color:var(--color-text-muted)]">{unit}</span>}
+        {unit && <span className="ml-2 sm:ml-3 shrink-0 text-xs font-medium uppercase tracking-[0.14em] text-[color:var(--color-text-muted)]">{unit}</span>}
       </div>
       <FieldError>{error}</FieldError>
       {!error && <FieldHint>{hint}</FieldHint>}

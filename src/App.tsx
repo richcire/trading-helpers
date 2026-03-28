@@ -181,10 +181,10 @@ export default function App() {
           />
         </div>
       </div>
-      <main className="mx-auto w-full max-w-[var(--container-wide)] px-4 py-6 sm:px-6 sm:py-8">
+      <main className="mx-auto w-full max-w-[var(--container-wide)] px-3 py-4 sm:px-6 sm:py-8">
         <SessionTimeline />
-        <section className="animate-card-in mb-6 rounded-[var(--radius-panel)] border-l-2 border-l-[color:var(--color-accent)] panel-surface px-5 py-4">
-          <h2 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-[color:var(--color-text-primary)]">
+        <section className="animate-card-in mb-4 sm:mb-6 rounded-[var(--radius-panel)] border-l-2 border-l-[color:var(--color-accent)] panel-surface px-4 sm:px-5 py-3 sm:py-4">
+          <h2 className="mt-2 text-lg sm:text-xl font-semibold tracking-[-0.03em] text-[color:var(--color-text-primary)]">
             {currentRoute.introTitle}
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-[color:var(--color-text-secondary)]">

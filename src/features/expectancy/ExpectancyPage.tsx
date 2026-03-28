@@ -126,8 +126,8 @@ export function ExpectancyPage() {
   }
 
   return (
-    <div className="space-y-5">
-      <div className="grid gap-5 xl:grid-cols-[1.05fr_0.95fr]">
+    <div className="space-y-3 sm:space-y-5">
+      <div className="grid gap-3 sm:gap-5 xl:grid-cols-[1.05fr_0.95fr]">
         <SectionCard
           actions={
             <ActionButton onClick={reset} tone="warning" variant="outline">

@@ -32,8 +32,9 @@ export function CalculationTooltipPanel({ align = 'right', tone = 'neutral', too
   return (
     <div
       className={clsx(
-        'pointer-events-none absolute z-30 mt-2 w-[min(90vw,22rem)] rounded-[var(--radius-control)] border border-[color:var(--color-border-strong)] panel-elevated p-3 text-left shadow-[var(--shadow-modal)]',
-        align === 'right' ? 'right-0 top-full' : 'left-0 top-full',
+        'pointer-events-none absolute z-30 mt-2 w-[min(calc(100vw-32px),22rem)] rounded-[var(--radius-control)] border border-[color:var(--color-border-strong)] panel-elevated p-3 text-left shadow-[var(--shadow-modal)]',
+        'max-sm:left-1/2 max-sm:-translate-x-1/2',
+        align === 'right' ? 'sm:right-0 sm:left-auto sm:translate-x-0 top-full' : 'sm:left-0 sm:translate-x-0 top-full',
       )}
       role="tooltip"
     >

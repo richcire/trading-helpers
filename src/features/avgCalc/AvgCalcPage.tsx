@@ -217,8 +217,8 @@ export function AvgCalcPage() {
   }, [currentPrice, direction, result, settings.adjustStopTakePriceForFees, settings.currency, settings.includeFeesInPnL, settings.leverage, stopConfig.mode, stopConfig.value, t, takeConfig.mode, takeConfig.value])
 
   return (
-    <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
-      <div className="space-y-5">
+    <div className="grid gap-3 sm:gap-5 xl:grid-cols-[1.1fr_0.9fr]">
+      <div className="space-y-3 sm:space-y-5">
         <SectionCard
           actions={
             <ActionButton onClick={reset} tone="warning" variant="outline">
@@ -326,7 +326,7 @@ export function AvgCalcPage() {
         </SectionCard>
       </div>
 
-      <div className="space-y-5">
+      <div className="space-y-3 sm:space-y-5">
         <ResultCard
           actions={<CopyButton text={summaryText} />}
           stagger={100}

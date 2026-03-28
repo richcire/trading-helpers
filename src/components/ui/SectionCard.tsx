@@ -43,7 +43,7 @@ export function SectionCard({
   return (
     <section
       className={clsx(
-        'rounded-[var(--radius-panel)] p-5 sm:p-6',
+        'rounded-[var(--radius-panel)] p-4 sm:p-6',
         surfaceClasses[surface],
         toneClasses[tone],
         typeof stagger === 'number' && 'animate-card-in',
@@ -52,7 +52,7 @@ export function SectionCard({
       style={typeof stagger === 'number' ? { '--stagger': `${stagger}ms` } as React.CSSProperties : undefined}
     >
       {(eyebrow || title || description || actions) && (
-        <div className="mb-5 flex items-start justify-between gap-4">
+        <div className="mb-4 sm:mb-5 flex items-start justify-between gap-3 sm:gap-4">
           <div className="space-y-1.5">
             {eyebrow && (
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--color-text-muted)]">
