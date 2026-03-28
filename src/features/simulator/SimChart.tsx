@@ -163,7 +163,7 @@ export function SimChart({ avgPrice, currencyUnit, currentPrice, direction, entr
 
   return (
     <div className="h-[340px] w-full">
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="99%" height={336}>
         <LineChart data={data} margin={{ top: 12, right: 8, bottom: 4, left: 0 }}>
           <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
           <XAxis

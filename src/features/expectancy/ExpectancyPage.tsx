@@ -185,7 +185,7 @@ export function ExpectancyPage() {
 
       <SectionCard eyebrow={t('common.section.curve')} stagger={160} title={t('exp.curve.title')}>
         <div className="h-[320px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="99%" height={316}>
             <LineChart data={curvePoints} margin={{ top: 12, right: 8, bottom: 4, left: 0 }}>
               <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
               <XAxis dataKey="RR" stroke="var(--color-text-muted)" tick={{ fill: 'var(--color-text-muted)', fontSize: 12 }} />
