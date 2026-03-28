@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 
 import { useI18n } from '../../i18n'
 import { useSettingsStore } from '../../store/useSettingsStore'
-import type { CalculationTooltipPayload } from '../../types'
+import type { CalculationTooltipPayload, RiskMode } from '../../types'
 import { formatCurrencyUnit, formatCurrencyValue, formatNumber } from '../../utils/format'
 import { ActionButton } from '../../components/ui/ActionButton'
 import { ValueWithTooltip } from '../../components/ui/CalculationTooltip'
@@ -154,7 +154,7 @@ export function SizingPage() {
                   ]}
                   modeValue={riskMode}
                   onChange={setRiskValue}
-                  onModeChange={setRiskMode}
+                  onModeChange={(v) => setRiskMode(v as RiskMode)}
                   tone="warning"
                   type="number"
                   unit={riskMode === 'pct' ? '%' : currencyUnit}
