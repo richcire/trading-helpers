@@ -34,3 +34,17 @@ test('corrupt preferences recover and valid follow choices are sanitized',()=>{
  assert.deepEqual(restorePreferences(JSON.stringify({follows:[1,null,'baron','baron','invalid,filter']})),{follows:['baron']});
  assert.deepEqual(restorePreferences(JSON.stringify({follows:[]})),{follows:[]});
 });
+
+test('reports keep all positions together and separate institutions, periods and filings',async()=>{
+ const {groupReports}=await import('../src/features/whaleWatch/reports.ts');
+ const base={manager_id:'ark',period:'2026-06-30',filed:'2026-08-14',source:'https://www.sec.gov/report-a'};
+ const rows=Array.from({length:1051},(_,id)=>({...base,id}));
+ rows.push({...base,id:1052,manager_id:'scion'});
+ rows.push({...base,id:1053,period:'2026-03-31',filed:'2026-05-15'});
+ rows.push({...base,id:1054,source:'https://www.sec.gov/report-b',filed:'2026-08-15'});
+ const reports=groupReports(rows);
+ assert.equal(reports.length,4);
+ assert.equal(reports[0].source,'https://www.sec.gov/report-b');
+ assert.equal(reports.find(r=>r.manager==='ark'&&r.period===base.period&&r.source===base.source).events.length,1051);
+ assert.equal(reports.at(-1).period,'2026-03-31');
+});

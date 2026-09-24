@@ -1,5 +1,12 @@
 export const copy={
   "ko": {
+    "reports": "기관별 보고서",
+    "reportHint": "보고서를 펼쳐 종목별 보유 변화를 확인하세요.",
+    "reportCount": "표시된 보유 변화",
+    "expand": "보유 변화 보기",
+    "collapse": "접기",
+    "filteredReports": "검색 조건에 맞는 보유 변화만 표시합니다.",
+
     "feed": "공시 피드",
     "following": "관심 투자자",
     "refresh": "새로고침",
@@ -60,6 +67,13 @@ export const copy={
     "investors": "투자자 목록"
   },
   "en": {
+    "reports": "Institution reports",
+    "reportHint": "Open a report to explore changes in individual holdings.",
+    "reportCount": "Matching holding changes",
+    "expand": "View holding changes",
+    "collapse": "Collapse",
+    "filteredReports": "Only holding changes matching your filters are shown.",
+
     "feed": "Filing feed",
     "following": "Following",
     "refresh": "Refresh",
@@ -120,6 +134,13 @@ export const copy={
     "investors": "Investors"
   },
   "ja": {
+    "reports": "機関別レポート",
+    "reportHint": "レポートを開くと銘柄ごとの保有変動を確認できます。",
+    "reportCount": "該当する保有変動",
+    "expand": "保有変動を見る",
+    "collapse": "閉じる",
+    "filteredReports": "検索条件に一致する保有変動のみ表示しています。",
+
     "feed": "開示フィード",
     "following": "フォロー",
     "refresh": "更新",

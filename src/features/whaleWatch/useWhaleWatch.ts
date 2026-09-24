@@ -23,14 +23,14 @@ export function useWhaleWatch(){
   }
  },[selectedView,setSearchParams]);
  const [filters,setFilters]=useState<Filters>(emptyFilters);
- const [loading,setLoading]=useState(true),[error,setError]=useState(false),[more,setMore]=useState(false);
+ const [loading,setLoading]=useState(true),[error,setError]=useState(false);
  const [detail,setDetail]=useState<WhaleEvent|null>(null);
  const busy=useRef(false),request=useRef<AbortController|null>(null);
  useEffect(()=>{try{localStorage.setItem(storageKey,JSON.stringify(prefs));}catch{queueMicrotask(()=>setStorageError(true));}},[prefs]);
  const followsKey=prefs.follows.join(',');
- const loadFeed=useCallback(async(append=false,offset=0)=>{
+ const loadFeed=useCallback(async()=>{
   request.current?.abort();const controller=new AbortController();request.current=controller;setLoading(true);
-  try{const data=await getFeed(filters,followsKey.split(','),offset,controller.signal);if(controller.signal.aborted)return;setEvents(old=>append?[...old,...data.filter(e=>!old.some(o=>o.id===e.id))]:data);setMore(data.length===50);setError(false);}
+  try{const data=await getFeed(filters,followsKey.split(','),controller.signal);if(controller.signal.aborted)return;setEvents(data);setError(false);}
   catch(e){if(!(e instanceof DOMException&&e.name==='AbortError'))setError(true);}
   finally{if(!controller.signal.aborted)setLoading(false);}
  },[filters,followsKey]);
@@ -48,5 +48,5 @@ export function useWhaleWatch(){
   const timer=setInterval(update,5*60*1000);document.addEventListener('visibilitychange',update);
   return()=>{clearInterval(timer);document.removeEventListener('visibilitychange',update);};
  },[check]);
- return {checkedAt,prefs,setPrefs,storageError,managers,events,tab,setTab,filters,setFilters,loading,error,more,detail,setDetail,loadFeed,check};
+ return {checkedAt,prefs,setPrefs,storageError,managers,events,tab,setTab,filters,setFilters,loading,error,detail,setDetail,loadFeed,check};
 }
