@@ -1,7 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {restorePreferences} from '../src/features/whaleWatch/logic.ts';
 
 // Test the deployed parser; only resolve Deno's pinned npm import for Node.
 const source=await readFile(new URL('../supabase/functions/whale-watch-sync/core.mjs',import.meta.url),'utf8');
@@ -25,16 +24,6 @@ test('only original 13F reports are comparison candidates',()=>{
  const filings=recentFilings({accessionNumber:['0000000001-26-000001','0000000001-26-000002'],form:['13F-HR','13F-HR/A'],filingDate:['2026-08-01','2026-08-02'],reportDate:['2026-06-30','2026-06-30'],primaryDocument:['a.xml','b.xml']});
  assert.equal(filings.length,1);assert.equal(filings[0].form,'13F-HR');
 });
-test('legacy preferences retain follows and discard removed notification data',()=>{
- const previous={follows:['baron','scion'],rules:[{id:'old'}],alerts:[{event:{id:7}}],cursor:99};
- assert.deepEqual(restorePreferences(JSON.stringify(previous)),{follows:['baron','scion']});
-});
-test('corrupt preferences recover and valid follow choices are sanitized',()=>{
- assert.deepEqual(restorePreferences('bad JSON'),{follows:['scion','berkshire','pershing']});
- assert.deepEqual(restorePreferences(JSON.stringify({follows:[1,null,'baron','baron','invalid,filter']})),{follows:['baron']});
- assert.deepEqual(restorePreferences(JSON.stringify({follows:[]})),{follows:[]});
-});
-
 test('reports keep all positions together and separate institutions, periods and filings',async()=>{
  const {groupReports}=await import('../src/features/whaleWatch/reports.ts');
  const base={manager_id:'ark',period:'2026-06-30',filed:'2026-08-14',source:'https://www.sec.gov/report-a'};

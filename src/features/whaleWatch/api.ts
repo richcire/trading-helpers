@@ -8,10 +8,9 @@ async function read<T>(table:string,query:Record<string,string>,signal?:AbortSig
  return response.json();
 }
 export const getManagers=()=>read<Manager[]>('ww_managers',{select:'id,cik,name_ko,name_en,name_ja,firm,last_attempt,last_success,latest_period,status,error_code,has_amendments',order:'slot.asc'});
-export async function getFeed(filters:Filters,follows:string[],signal?:AbortSignal){
+export async function getFeed(filters:Filters,signal?:AbortSignal){
  const query:Record<string,string>={select:'*',order:'id.desc',limit:'1000'};
  if(filters.manager)query.manager_id=`eq.${filters.manager}`;
- else if(filters.followed)query.manager_id=`in.(${follows.filter(x=>/^[a-z]+$/.test(x)).join(',')||'none'})`;
  if(filters.action)query.action=`eq.${filters.action}`;
  if(filters.option)query.option=`eq.${filters.option==='STOCK'?'':filters.option}`;
  const search=filters.search.trim().replace(/[^\p{L}\p{N} .-]/gu,'').slice(0,60);
