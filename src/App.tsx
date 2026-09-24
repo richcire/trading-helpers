@@ -19,6 +19,7 @@ import { DcaPage } from "./features/dca/DcaPage";
 import { DocsPage } from "./features/docs/DocsPage";
 import { ExpectancyPage } from "./features/expectancy/ExpectancyPage";
 import { SimulatorPage } from "./features/simulator/SimulatorPage";
+import { WhaleWatchPage } from "./features/whaleWatch/WhaleWatchPage";
 import { SizingPage } from "./features/sizing/SizingPage";
 import { useI18n } from "./i18n";
 import type { RouteMeta } from "./types";
@@ -67,6 +68,7 @@ const ROUTE_BLUEPRINT = [
     component: ExpectancyPage,
     showInTabs: true,
   },
+  { id: "whaleWatch", path: "/whale-watch", metaKey: "whale", component: WhaleWatchPage, showInTabs: true },
   {
     id: "docs",
     path: "/docs",
@@ -101,6 +103,8 @@ function ensureCanonicalLink() {
 }
 
 const InitialLoadContext = createContext(true);
+// Existing shared context hook is intentionally exported alongside the app.
+// eslint-disable-next-line react-refresh/only-export-components
 export const useInitialLoad = () => useContext(InitialLoadContext);
 
 export default function App() {
@@ -207,7 +211,7 @@ export default function App() {
         </div>
       </div>
       <main className="mx-auto w-full max-w-[var(--container-wide)] px-3 py-4 sm:px-6 sm:py-8">
-        <SessionTimeline />
+        {currentRoute.id !== "whaleWatch" && <SessionTimeline />}
         {currentRoute.id !== "docs" && (
           <div className={`${isInitialLoad ? "animate-card-in" : ""} mb-4 sm:mb-6 px-1 sm:px-2`}>
             <h2 className="text-lg sm:text-xl font-semibold tracking-[-0.03em] bg-gradient-to-r from-[color:var(--color-accent)] to-[color:var(--color-info)] bg-clip-text text-transparent">

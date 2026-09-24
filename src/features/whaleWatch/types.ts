@@ -1,0 +1,16 @@
+export interface Manager {
+ id:string; cik:string; name_ko:string; name_en:string; name_ja:string; firm:string;
+ last_attempt:string|null; last_success:string|null; latest_period:string|null;
+ status:string; error_code:string|null; has_amendments:boolean;
+}
+export interface WhaleEvent {
+ id:number; event_key:string; manager_id:string; ticker:string; cusip:string; issuer:string;
+ option:''|'PUT'|'CALL'; unit:string; action:'new'|'increased'|'reduced'|'closed';
+ old_shares:number; new_shares:number; change_pct:number|null;
+ period:string; previous_period:string; filed:string; source:string;
+ baseline:boolean; review_required:boolean; created_at:string;
+}
+export interface Rule {id:string;manager:string;ticker:string;action:string;option:string;enabled:boolean;createdAt:string;}
+export interface Alert {event:WhaleEvent;seen:boolean;}
+export interface Preferences {follows:string[];rules:Rule[];alerts:Alert[];cursor:number|null;}
+export interface Filters {manager:string;search:string;action:string;option:string;followed:boolean;}

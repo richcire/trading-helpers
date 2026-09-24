@@ -1,0 +1,1 @@
+create policy ww_filings_service on public.ww_filings for all to service_role using(true) with check(true); create policy ww_jobs_service on public.ww_jobs for all to service_role using(true) with check(true); create policy ww_settings_service on public.ww_worker_settings for all to service_role using(true) with check(true);

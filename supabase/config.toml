@@ -1,0 +1,5 @@
+project_id = "trading-helpers"
+
+[functions.whale-watch-sync]
+verify_jwt = false
+# Handler authenticates x-whale-token against the server-only SHA-256 credential.

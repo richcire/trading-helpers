@@ -4,6 +4,11 @@ export type TranslationDictionary = Record<string, string>
 
 export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
   en: {
+    'app.route.whale.label': 'Whale Watch',
+    'app.route.whale.title': 'Whale Watch | Trading Helpers',
+    'app.route.whale.description': 'Track institutional SEC filings and changes in stock, put and call holdings.',
+    'app.route.whale.introTitle': 'Follow the filings. See the changes.',
+    'app.route.whale.introDescription': 'Explore institutional holdings with original SEC sources.',
     'app.searchIntent': 'Search Intent',
     'app.route.avg.label': 'Average Price',
     'app.route.avg.title': 'Average Price Calculator | Trading Helpers',
@@ -289,6 +294,11 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
   },
 
   ko: {
+    'app.route.whale.label': 'Whale Watch',
+    'app.route.whale.title': 'Whale Watch | Trading Helpers',
+    'app.route.whale.description': '유명 투자자와 기관의 SEC 공시, 주식·풋·콜 보유 변화를 확인하세요.',
+    'app.route.whale.introTitle': '큰손의 움직임을, 공시로 확인하세요.',
+    'app.route.whale.introDescription': '기관별 보유 변화와 공시 원문을 한눈에 확인하세요.',
     'app.searchIntent': '검색 의도',
     'app.route.avg.label': '평균단가',
     'app.route.avg.title': '평균단가 계산기 | 트레이딩 헬퍼',
@@ -574,6 +584,11 @@ export const dictionaries: Record<LanguageCode, TranslationDictionary> = {
   },
 
   ja: {
+    'app.route.whale.label': 'Whale Watch',
+    'app.route.whale.title': 'Whale Watch | Trading Helpers',
+    'app.route.whale.description': '機関投資家のSEC開示と株式・プット・コールの保有変動を確認。',
+    'app.route.whale.introTitle': '投資家の動きを、開示で確認。',
+    'app.route.whale.introDescription': '機関別の保有変動とSECの原文を確認できます。',
     'app.searchIntent': '検索意図',
     'app.route.avg.label': '平均単価',
     'app.route.avg.title': '平均単価計算機 | Trading Helpers',

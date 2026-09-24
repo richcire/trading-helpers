@@ -36,3 +36,7 @@ trading_service_spec_v1.md
 .dev.vars*
 !.dev.vars.example
 !.env.example
+
+# Supabase CLI local cache
+supabase/.temp/
+supabase/.branches/
