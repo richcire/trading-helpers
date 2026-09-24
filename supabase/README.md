@@ -16,9 +16,9 @@ Trading Helpers의 `/whale-watch` 화면에서 Supabase에 저장된 SEC 13F 공
 
 `supabase/functions/whale-watch-sync`는 배포된 수집기입니다. JWT 대신 Vault에 보관된 임의 토큰을 검증합니다. 토큰 원문은 프론트엔드나 저장소에 없으며 DB 설정에는 SHA-256 해시만 있습니다. SEC 연락처는 서버 설정에서만 사용합니다. 서비스 역할 키는 Edge Function의 기본 환경변수로만 읽습니다.
 
-`whale-watch-15m` 예약 작업은 매분 실행하지만, 분을 15로 나눈 나머지가 기관별 슬롯(현재 0–9)과 일치할 때만 한 기관을 호출합니다. 각 기관은 15분마다 검사하며 그 외 5분은 네트워크 호출 없이 종료합니다. 정상 운용 기준 Edge 호출은 하루 960회입니다. Supabase 무료 플랜의 사용량·휴면 정책은 별도로 확인해야 합니다.
+`whale-watch-daily` 예약 작업은 매일 한국시간 오전 7시부터 7시 14분까지(UTC 전날 22:00–22:14) 기관별 슬롯에 따라 순차 실행합니다. 현재 10개 기관은 7시부터 7시 9분까지 각 1회 검사하며 나머지 5분은 네트워크 호출 없이 종료합니다. 정상 운용 기준 Edge 호출은 하루 10회입니다. 이전 `whale-watch-15m` 예약은 제거했습니다. Supabase 무료 플랜의 사용량·휴면 정책은 별도로 확인해야 합니다.
 
-실제 수집 성공 여부는 `ww_managers.last_success`, `status`, `error_code`로 확인합니다. cron의 succeeded는 HTTP 요청을 예약했다는 뜻이며 SEC 수집 성공을 보장하지 않습니다. 화면은 30분 이상 갱신되지 않으면 지연을 표시합니다.
+실제 수집 성공 여부는 `ww_managers.last_success`, `status`, `error_code`로 확인합니다. cron의 succeeded는 HTTP 요청을 예약했다는 뜻이며 SEC 수집 성공을 보장하지 않습니다. 화면은 하루 수집 주기에 2시간의 여유를 두어 26시간 이상 갱신되지 않으면 지연을 표시합니다.
 
 ## 데이터 해석
 
