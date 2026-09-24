@@ -10,7 +10,5 @@ export interface WhaleEvent {
  period:string; previous_period:string; filed:string; source:string;
  baseline:boolean; review_required:boolean; created_at:string;
 }
-export interface Rule {id:string;manager:string;ticker:string;action:string;option:string;enabled:boolean;createdAt:string;}
-export interface Alert {event:WhaleEvent;seen:boolean;}
-export interface Preferences {follows:string[];rules:Rule[];alerts:Alert[];cursor:number|null;}
+export interface Preferences {follows:string[];}
 export interface Filters {manager:string;search:string;action:string;option:string;followed:boolean;}

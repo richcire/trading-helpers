@@ -8,8 +8,6 @@ async function read<T>(table:string,query:Record<string,string>,signal?:AbortSig
  return response.json();
 }
 export const getManagers=()=>read<Manager[]>('ww_managers',{select:'id,cik,name_ko,name_en,name_ja,firm,last_attempt,last_success,latest_period,status,error_code,has_amendments',order:'slot.asc'});
-export const getNewest=()=>read<WhaleEvent[]>('ww_events',{select:'*',order:'id.desc',limit:'1'});
-export const getAfter=(cursor:number)=>read<WhaleEvent[]>('ww_events',{select:'*',id:`gt.${cursor}`,order:'id.asc',limit:'200'});
 export function getFeed(filters:Filters,follows:string[],offset:number,signal?:AbortSignal){
  const query:Record<string,string>={select:'*',order:'id.desc',limit:'50',offset:String(offset)};
  if(filters.manager)query.manager_id=`eq.${filters.manager}`;

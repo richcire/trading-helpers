@@ -1,8 +1,8 @@
 import {useCallback,useEffect,useEffectEvent,useRef,useState} from 'react';
 import {useSearchParams} from 'react-router-dom';
-import {getAfter,getFeed,getManagers,getNewest} from './api';
-import {ingest,restorePreferences} from './logic';
-import type {Filters,Manager,Preferences,Rule,WhaleEvent} from './types';
+import {getFeed,getManagers} from './api';
+import {restorePreferences} from './logic';
+import type {Filters,Manager,Preferences,WhaleEvent} from './types';
 
 const storageKey='trading-whale-watch-v1';
 const emptyFilters:Filters={manager:'',search:'',action:'',option:'',followed:false};
@@ -15,14 +15,18 @@ export function useWhaleWatch(){
  const [events,setEvents]=useState<WhaleEvent[]>([]);
  const [searchParams,setSearchParams]=useSearchParams();
  const selectedView=searchParams.get('view');
- const tab=selectedView==='following'||selectedView==='rules'||selectedView==='inbox'?selectedView:'feed';
+ const tab=selectedView==='following'?'following':'feed';
  const setTab=(view:string)=>setSearchParams(view==='feed'?{}:{view});
+ useEffect(()=>{
+  if(selectedView&&selectedView!=='following'){
+   setSearchParams(previous=>{const next=new URLSearchParams(previous);next.delete('view');return next;},{replace:true});
+  }
+ },[selectedView,setSearchParams]);
  const [filters,setFilters]=useState<Filters>(emptyFilters);
  const [loading,setLoading]=useState(true),[error,setError]=useState(false),[more,setMore]=useState(false);
- const [detail,setDetail]=useState<WhaleEvent|null>(null),[edit,setEdit]=useState<Partial<Rule>|null>(null);
- const [ruleError,setRuleError]=useState(false);
- const prefsRef=useRef(prefs),busy=useRef(false),request=useRef<AbortController|null>(null);
- useEffect(()=>{prefsRef.current=prefs;try{localStorage.setItem(storageKey,JSON.stringify(prefs));}catch{queueMicrotask(()=>setStorageError(true));}},[prefs]);
+ const [detail,setDetail]=useState<WhaleEvent|null>(null);
+ const busy=useRef(false),request=useRef<AbortController|null>(null);
+ useEffect(()=>{try{localStorage.setItem(storageKey,JSON.stringify(prefs));}catch{queueMicrotask(()=>setStorageError(true));}},[prefs]);
  const followsKey=prefs.follows.join(',');
  const loadFeed=useCallback(async(append=false,offset=0)=>{
   request.current?.abort();const controller=new AbortController();request.current=controller;setLoading(true);
@@ -33,18 +37,7 @@ export function useWhaleWatch(){
  const check=useCallback(async()=>{
   if(busy.current)return;busy.current=true;
   try{
-   const [investors,newest]=await Promise.all([getManagers(),getNewest()]);setManagers(investors);
-   const cursor=prefsRef.current.cursor;
-   if(cursor===null)setPrefs(p=>ingest(p,newest));
-   else if((newest[0]?.id||0)>cursor){
-    let next=cursor;
-    // Bounded catch-up; persist only the processed cursor so later visits resume safely.
-    for(let i=0;i<5;i++){
-     const rows=await getAfter(next);if(!rows.length)break;
-     setPrefs(p=>ingest(p,rows));next=rows[rows.length-1].id;
-     if(rows.length<200)break;
-    }
-   }
+   setManagers(await getManagers());
   }catch{setError(true);}finally{busy.current=false;setCheckedAt(Date.now());}
  },[]);
  useEffect(()=>{const timer=window.setTimeout(()=>{void loadFeed();},250);return()=>{clearTimeout(timer);request.current?.abort();};},[loadFeed]);
@@ -55,5 +48,5 @@ export function useWhaleWatch(){
   const timer=setInterval(update,5*60*1000);document.addEventListener('visibilitychange',update);
   return()=>{clearInterval(timer);document.removeEventListener('visibilitychange',update);};
  },[check]);
- return {checkedAt,prefs,setPrefs,storageError,managers,events,tab,setTab,filters,setFilters,loading,error,more,detail,setDetail,edit,setEdit,ruleError,setRuleError,loadFeed,check};
+ return {checkedAt,prefs,setPrefs,storageError,managers,events,tab,setTab,filters,setFilters,loading,error,more,detail,setDetail,loadFeed,check};
 }
