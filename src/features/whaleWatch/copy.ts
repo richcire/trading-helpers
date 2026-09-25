@@ -1,5 +1,12 @@
 export const copy={
   "ko": {
+    "allocation": "종목별 보유 비중",
+    "allocationNote": "공시 평가금액 기준 · 주식·ETF 등 현물만 포함하며 옵션·채권·현금은 제외합니다. 상위 10개 외에는 기타로 묶습니다. 아래 검색과 관계없이 전체 현물 기준입니다.",
+    "other": "기타",
+    "reportedEquities": "공시 현물",
+    "valuesMissing": "평가금액을 확인 중입니다. 금액이 모두 확인되면 비중을 표시합니다.",
+    "noEquities": "차트에 표시할 현물 보유가 없습니다.",
+
     "viewReport": "보고서 보기",
     "backReports": "보고서 목록",
     "reportMissing": "보고서를 찾을 수 없습니다.",
@@ -73,6 +80,13 @@ export const copy={
     "investors": "투자자 목록"
   },
   "en": {
+    "allocation": "Holdings allocation",
+    "allocationNote": "Based on reported values of equities and ETFs. Options, debt and cash are excluded. Top 10 positions plus Other; unaffected by the search below.",
+    "other": "Other",
+    "reportedEquities": "Reported equities",
+    "valuesMissing": "Reported values are not yet complete. Allocation will appear once all values are available.",
+    "noEquities": "No equity holdings to chart.",
+
     "viewReport": "View report",
     "backReports": "All reports",
     "reportMissing": "Report not found.",
@@ -146,6 +160,13 @@ export const copy={
     "investors": "Investors"
   },
   "ja": {
+    "allocation": "銘柄別保有比率",
+    "allocationNote": "開示評価額に基づく株式・ETF等の現物の比率です。オプション・債券・現金は除外。上位10件以外はその他。下の検索条件には影響されません。",
+    "other": "その他",
+    "reportedEquities": "開示現物",
+    "valuesMissing": "評価額を確認中です。すべての金額が確認でき次第、比率を表示します。",
+    "noEquities": "表示する現物保有がありません。",
+
     "viewReport": "レポートを見る",
     "backReports": "レポート一覧",
     "reportMissing": "レポートが見つかりません。",

@@ -58,3 +58,9 @@ Trading Helpers의 `/whale-watch` 화면에서 Supabase에 저장된 SEC 13F 공
 | Third Point | 1040273 |
 
 추가 기관도 최초 수집 자료는 과거 이력으로 저장합니다. 방문자의 기존 팔로우는 유지되며, 기관 목록에서 새 기관을 선택할 수 있습니다. 수집 목록은 DB의 `ww_managers`를 기준으로 하며 프론트엔드와 수집기는 해당 목록을 읽습니다. 기관의 수익률이나 추천 등급은 이 변경에서 추가하지 않습니다.
+
+## Holdings allocation
+
+The holdings detail chart uses the relative `reported_value` from SEC XML within each filing. It covers equities and ETFs (SH, no put/call), excludes options, debt and unreported cash, and is not a share of total institutional assets. Top 10 positions are shown individually; the rest form Other. Incomplete values suppress the chart.
+
+The collector enriches its latest two saved filings only when every security key, issuer and quantity matches the source. Original snapshot fields remain intact. New filings retain values at ingestion. The daily schedule is unchanged. `ww_filings` now has public SELECT access alongside managers and events; worker settings and leases remain private.

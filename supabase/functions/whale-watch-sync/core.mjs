@@ -16,10 +16,12 @@ export function parseHoldings(xml) {
     const unit=String(r.shrsOrPrnAmt?.sshPrnamtType||'SH').toUpperCase();
     const title=String(r.titleOfClass||'').toUpperCase();
     const shares=Number(r.shrsOrPrnAmt?.sshPrnamt);
+    const reported_value=r.value===undefined||String(r.value).trim()===''?null:Number(r.value);
+    if(reported_value!==null&&(!Number.isFinite(reported_value)||reported_value<0))throw new Error('INVALID_VALUE');
     if(!/^[A-Z0-9]{9}$/.test(cusip)||!Number.isFinite(shares)||shares<0||!['','PUT','CALL'].includes(option)) throw new Error('공시 수량 또는 식별자가 올바르지 않습니다.');
     const key=[cusip,title,option,unit].join('|');
-    if(merged.has(key)) merged.get(key).shares+=shares;
-    else merged.set(key,{key,cusip,ticker:symbols[cusip]||cusip,issuer:String(r.nameOfIssuer||cusip),title,option,unit,shares});
+    if(merged.has(key)){const old=merged.get(key);old.shares+=shares;old.reported_value=old.reported_value===null||reported_value===null?null:old.reported_value+reported_value;}
+    else merged.set(key,{key,cusip,ticker:symbols[cusip]||cusip,issuer:String(r.nameOfIssuer||cusip),title,option,unit,shares,reported_value});
   }
   return [...merged.values()];
 }
@@ -39,4 +41,13 @@ export function compareHoldings(previous,current){
 export function recentFilings(recent){
   if(!recent?.accessionNumber)return [];
   return recent.accessionNumber.map((accession,i)=>({accession,form:recent.form[i],filed:recent.filingDate[i],period:recent.reportDate[i],primary:recent.primaryDocument[i]})).filter(f=>f.form==='13F-HR'&&f.period&&/^\d{10}-\d{2}-\d{6}$/.test(f.accession)).sort((a,b)=>b.period.localeCompare(a.period)||b.filed.localeCompare(a.filed));
+}
+
+export function enrichValues(saved,fresh){
+ const values=new Map(fresh.map(row=>[row.key,row]));
+ if(saved.length!==fresh.length)throw new Error('SNAPSHOT_MISMATCH');
+ return saved.map(row=>{const match=values.get(row.key);
+  if(!match||match.shares!==row.shares||match.issuer!==row.issuer||match.reported_value===null||!Number.isFinite(match.reported_value))throw new Error('SNAPSHOT_MISMATCH');
+  return {...row,reported_value:match.reported_value};
+ });
 }

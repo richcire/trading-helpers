@@ -2,6 +2,7 @@ import {useEffect,useState} from 'react';
 import {useI18n} from '../../i18n';
 import {copy} from './copy';
 import {getReportHoldings} from './api';
+import {AllocationChart} from './AllocationChart';
 import type {Holding} from './types';
 
 export function Holdings({manager,period,source,locale}:{manager:string;period:string;source:string;locale:string}){
@@ -14,6 +15,7 @@ export function Holdings({manager,period,source,locale}:{manager:string;period:s
  const fmt=(n:number)=>new Intl.NumberFormat(locale,{maximumFractionDigits:2}).format(n);
  return <div className="ww-holdings"><p className="ww-note"><strong>{c.period} · {period}</strong><br/>{c.holdingsNote}</p><a className="ww-text-button" href={source} target="_blank" rel="noreferrer">{c.source} ↗</a>
  {error?<div className="ww-warning" role="alert">{c.error}<button onClick={()=>{setError(false);setRetry(n=>n+1);}}>{c.refresh}</button></div>:rows===null?<p role="status" className="ww-empty">{c.loading}</p>:<>
+ <AllocationChart rows={rows}/>
  <div className="ww-filters"><input aria-label={c.allHoldings+' · '+c.search} placeholder={c.search} value={search} onChange={e=>{setSearch(e.target.value);setLimit(50);}}/><select aria-label={c.allHoldings+' · '+c.asset} value={asset} onChange={e=>{setAsset(e.target.value);setLimit(50);}}><option value="">{c.allAssets}</option><option value="STOCK">{c.stock}</option><option value="PUT">{c.put}</option><option value="CALL">{c.call}</option><option value="DEBT">{c.debt}</option></select></div>
  <p className="ww-note">{c.positionsShown} · {fmt(filtered.length)} / {fmt(rows.length)}</p>
  <div className="ww-holdings-list">{filtered.slice(0,limit).map(row=><div className="ww-holding" key={row.key}><div className="ww-security"><div><strong>{row.ticker}</strong><span className="ww-badge">{row.option==='PUT'?c.put:row.option==='CALL'?c.call:row.unit==='PRN'?c.debt:c.stock}</span></div><small>{row.issuer}</small><small>{row.title} · CUSIP {row.cusip}</small></div><div className="ww-holding-quantity"><strong>{fmt(row.shares)}</strong><small>{c.quantityHeld}</small><small>{row.option?c.optionUnit:row.unit==='PRN'?c.principalUnit:c.shareUnit}</small></div></div>)}</div>

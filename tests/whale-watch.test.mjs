@@ -48,3 +48,27 @@ test('holding tickers require matching period, issuer and exact security; snapsh
  assert.equal(row.ticker,row.cusip);
  assert.equal(resolveHoldings([row],[],'2026-06-30')[0].shares,25);
 });
+
+test('reported values sum duplicate lots and enrichment refuses changed snapshots',async()=>{
+ const {enrichValues}=await import('data:text/javascript;base64,'+Buffer.from(source.replace('npm:fast-xml-parser@5.11.1',import.meta.resolve('fast-xml-parser'))).toString('base64'));
+ const valued=n=>row(n).replace('<titleOfClass>','<value>200</value><titleOfClass>');
+ const fresh=parseHoldings(xml(valued(10),valued(20)));
+ assert.equal(fresh[0].shares,30);assert.equal(fresh[0].reported_value,400);
+ const saved=fresh.map(({reported_value,...h})=>h);
+ assert.equal(enrichValues(saved,fresh)[0].reported_value,400);
+ assert.equal(saved[0].reported_value,undefined);
+ assert.throws(()=>enrichValues(saved,[{...fresh[0],shares:31}]));
+ assert.throws(()=>enrichValues(saved,[{...fresh[0],issuer:'Another company'}]));
+ assert.throws(()=>parseHoldings(xml(row(10).replace('<titleOfClass>','<value>-1</value><titleOfClass>'))));
+});
+
+test('allocation uses complete equity values, excludes derivatives, and conserves the Other slice',async()=>{
+ const {allocation}=await import('../src/features/whaleWatch/allocation.ts');
+ const rows=Array.from({length:12},(_,i)=>({key:String(i),ticker:'T'+i,issuer:'I'+i,unit:'SH',option:'',shares:1000000-i,reported_value:i+1}));
+ const result=allocation([...rows,{...rows[0],option:'PUT',reported_value:10000},{...rows[0],unit:'PRN',reported_value:10000}]);
+ assert.equal(result.total,78);assert.equal(result.items.length,11);
+ assert.equal(result.items[0].name,'T11');assert.equal(result.items.at(-1).value,3);
+ assert.ok(Math.abs(result.items.reduce((s,r)=>s+r.percent,0)-100)<1e-8);
+ assert.equal(allocation([{...rows[0],reported_value:null}]).status,'missing');
+ assert.equal(allocation([{...rows[0],reported_value:0}]).status,'empty');
+});

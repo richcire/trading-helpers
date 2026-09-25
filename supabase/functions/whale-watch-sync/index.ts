@@ -1,4 +1,4 @@
-import { parseHoldings, compareHoldings, recentFilings } from './core.mjs';
+import { parseHoldings, compareHoldings, recentFilings, enrichValues } from './core.mjs';
 
 const base=Deno.env.get('SUPABASE_URL')!;
 const service=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -43,15 +43,12 @@ Deno.serve(async req=>{
   const periods=[...new Set(recent.form.flatMap((f,i)=>['13F-HR','13F-HR/A'].includes(f)&&recent.reportDate[i]?[recent.reportDate[i]]:[]))].sort().reverse();
   const amended=[...new Set(recent.form.flatMap((f,i)=>f==='13F-HR/A'&&recent.reportDate[i]?[recent.reportDate[i]]:[]))];
   if(amended.length)await db('rpc/ww_mark_amendments','POST',{p_manager:managerId,p_periods:amended});
-  const saved=await db(`ww_filings?manager_id=eq.${managerId}&select=accession,period&order=period.desc`);
+  const saved=await db(`ww_filings?manager_id=eq.${managerId}&select=accession,period,filed,holdings&order=period.desc`);
   const initial=saved.length===0;
   const known=new Set(saved.map((f:Filing)=>f.accession));
   const latest=saved[0]?.period;
   const candidates=originals.filter(f=>!known.has(f.accession)&&(initial?periods.slice(0,2).includes(f.period):f.period>latest)).sort((a,b)=>a.period.localeCompare(b.period)||a.filed.localeCompare(b.filed));
-  let added=0,changes=0,held=0;
-  for(const f of candidates.slice(0,4)){
-   const expectedPrevious=periods[periods.indexOf(f.period)+1];
-   if(amended.includes(f.period)||amended.includes(expectedPrevious)){held++;continue;}
+  async function fetchHoldings(f:Filing){
    const url=`https://www.sec.gov/Archives/edgar/data/${Number(manager.cik)}/${f.accession.replaceAll('-','')}`;
    const listing=JSON.parse(await sec(`${url}/index.json`));
    const files=(listing.directory?.item||[]).map((x:{name:string})=>x.name).filter((name:string)=>/\.xml$/i.test(name)&&name!==f.primary&&!name.includes('/')).sort((a:string,b:string)=>Number(/info|table/i.test(b))-Number(/info|table/i.test(a)));
@@ -61,13 +58,30 @@ Deno.serve(async req=>{
     if(/<(?:\w+:)?informationTable\b/.test(xml)){holdings=parseHoldings(xml);break;}
    }
    if(!holdings)throw new Error('HOLDINGS_NOT_FOUND');
+   return {holdings,url};
+  }
+  // Enrich saved snapshots only after every original security and quantity matches.
+  let enriched=0;
+  for(const existing of saved.slice(0,2)){
+   if(existing.holdings.every((h:{reported_value?:number})=>typeof h.reported_value==='number'))continue;
+   const original=originals.find(f=>f.accession===existing.accession);
+   if(!original)continue;
+   const {holdings}=await fetchHoldings(original);
+   const updated=enrichValues(existing.holdings,holdings);
+   await db(`ww_filings?accession=eq.${existing.accession}`,'PATCH',{holdings:updated});enriched++;
+  }
+  let added=0,changes=0,held=0;
+  for(const f of candidates.slice(0,4)){
+   const expectedPrevious=periods[periods.indexOf(f.period)+1];
+   if(amended.includes(f.period)||amended.includes(expectedPrevious)){held++;continue;}
+   const {holdings,url}=await fetchHoldings(f);
    const prior=expectedPrevious?(await db(`ww_filings?manager_id=eq.${managerId}&period=eq.${expectedPrevious}&select=period,holdings&order=filed.desc&limit=1`))[0]:null;
    const events=prior?compareHoldings(prior.holdings,holdings):[];
    const inserted=await db('rpc/ww_commit_filing','POST',{p:{accession:f.accession,manager_id:managerId,period:f.period,filed:f.filed,source:`${url}/${f.accession}-index.html`,holdings,previous_period:prior?.period||null,events,baseline:initial||saved.length<2}});
    if(inserted){added++;changes+=events.length;}
   }
   await db(`ww_managers?id=eq.${managerId}`,'PATCH',{last_success:new Date().toISOString(),latest_period:periods[0]||null,status:held?'review':originals.length?'ready':'no_filings',error_code:null,has_amendments:amended.length>0});
-  return reply({ok:true,manager:managerId,added,changes,held});
+  return reply({ok:true,manager:managerId,added,changes,held,enriched});
  }catch(error){
   const raw=error instanceof Error?error.message:'UNKNOWN';
   const code=/^(SEC_\d+|DATABASE_\d+|TIME_BUDGET|DOCUMENT_TOO_LARGE|INVALID_SUBMISSIONS|HOLDINGS_NOT_FOUND)$/.test(raw)?raw:'SYNC_FAILED';
