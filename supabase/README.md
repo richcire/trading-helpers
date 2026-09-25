@@ -61,6 +61,6 @@ Trading Helpers의 `/whale-watch` 화면에서 Supabase에 저장된 SEC 13F 공
 
 ## Holdings allocation
 
-The holdings detail chart uses the relative `reported_value` from SEC XML within each filing. It covers equities and ETFs (SH, no put/call), excludes options, debt and unreported cash, and is not a share of total institutional assets. Top 10 positions are shown individually; the rest form Other. Incomplete values suppress the chart.
+The holdings detail chart uses the relative `reported_value` from SEC XML within each filing. It covers equities and ETFs (SH, no put/call), excludes options, debt and unreported cash, and is not a share of total institutional assets. All positions are shown individually without an Other bucket. Incomplete values suppress the chart.
 
 The collector enriches its latest two saved filings only when every security key, issuer and quantity matches the source. Original snapshot fields remain intact. New filings retain values at ingestion. The daily schedule is unchanged. `ww_filings` now has public SELECT access alongside managers and events; worker settings and leases remain private.

@@ -62,12 +62,12 @@ test('reported values sum duplicate lots and enrichment refuses changed snapshot
  assert.throws(()=>parseHoldings(xml(row(10).replace('<titleOfClass>','<value>-1</value><titleOfClass>'))));
 });
 
-test('allocation uses complete equity values, excludes derivatives, and conserves the Other slice',async()=>{
+test('allocation uses complete equity values, excludes derivatives, and retains every position',async()=>{
  const {allocation}=await import('../src/features/whaleWatch/allocation.ts');
  const rows=Array.from({length:12},(_,i)=>({key:String(i),ticker:'T'+i,issuer:'I'+i,unit:'SH',option:'',shares:1000000-i,reported_value:i+1}));
  const result=allocation([...rows,{...rows[0],option:'PUT',reported_value:10000},{...rows[0],unit:'PRN',reported_value:10000}]);
- assert.equal(result.total,78);assert.equal(result.items.length,11);
- assert.equal(result.items[0].name,'T11');assert.equal(result.items.at(-1).value,3);
+ assert.equal(result.total,78);assert.equal(result.items.length,12);
+ assert.equal(result.items[0].name,'T11');assert.equal(result.items.at(-1).value,1);
  assert.ok(Math.abs(result.items.reduce((s,r)=>s+r.percent,0)-100)<1e-8);
  assert.equal(allocation([{...rows[0],reported_value:null}]).status,'missing');
  assert.equal(allocation([{...rows[0],reported_value:0}]).status,'empty');
