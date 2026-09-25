@@ -11,3 +11,6 @@ export interface WhaleEvent {
  baseline:boolean; review_required:boolean; created_at:string;
 }
 export interface Filters {manager:string;search:string;action:string;option:string;}
+
+export interface Holding {key:string;cusip:string;ticker:string;issuer:string;title:string;option:''|'PUT'|'CALL';unit:string;shares:number;}
+export interface Filing {accession:string;manager_id:string;period:string;filed:string;source:string;holdings:Holding[];}

@@ -6,6 +6,7 @@ import {useWhaleWatch} from './useWhaleWatch';
 import type {WhaleEvent} from './types';
 import './whale.css';
 import {groupReports} from './reports';
+import {ReportContents} from './ReportContents';
 
 function Modal({children,onClose,label}:{children:React.ReactNode;onClose:()=>void;label:string}){
  const ref=useRef<HTMLDialogElement>(null);
@@ -43,7 +44,7 @@ export function WhaleWatchPage(){
      <span className="ww-report-total"><strong>{fmt(report.events.length)}</strong><small>{c.reportCount}</small></span>
      <span className="ww-report-toggle">{open?c.collapse:c.expand} <span aria-hidden="true">{open?'−':'＋'}</span></span>
     </button>
-    <div id={`ww-report-${index}`} hidden={!open}>{open&&<><div className="ww-report-summary">{(['new','increased','reduced','closed'] as const).map(action=>{const count=report.events.filter(e=>e.action===action).length;return count?<span className={`ww-badge ${action}`} key={action}>{c[action]} {fmt(count)}</span>:null;})}<a href={report.source} target="_blank" rel="noreferrer">{c.source} ↗</a></div><div className="ww-event-list">{report.events.map(eventRow)}</div></>}</div>
+    <div id={`ww-report-${index}`} hidden={!open}>{open&&<ReportContents manager={report.manager} period={report.period} source={report.source}><div className="ww-report-summary">{(['new','increased','reduced','closed'] as const).map(action=>{const count=report.events.filter(e=>e.action===action).length;return count?<span className={`ww-badge ${action}`} key={action}>{c[action]} {fmt(count)}</span>:null;})}<a href={report.source} target="_blank" rel="noreferrer">{c.source} ↗</a></div><div className="ww-event-list">{report.events.map(eventRow)}</div></ReportContents>}</div>
    </article>;})}{(loading||!reports.length)&&<div className="ww-empty"><strong>{loading?c.loading:c.empty}</strong><p>{!loading&&c.emptyHint}</p></div>}</div>
   </SectionCard>}
   {tab==='investors'&&<><div className="ww-manager-grid">{managers.map(m=>{const stale=m.last_success&&checkedAt-Date.parse(m.last_success)>26*60*60*1000;return <SectionCard key={m.id}><div className="ww-manager-top"><span className="ww-avatar">{m.id.slice(0,2).toUpperCase()}</span><a href={`https://www.sec.gov/edgar/browse/?CIK=${m.cik}&owner=exclude`} target="_blank" rel="noreferrer">SEC ↗</a></div><h3>{name(m.id)}</h3><p className="ww-firm">{m.firm}</p><dl><div><dt>{c.period}</dt><dd>{m.latest_period||'—'}</dd></div><div><dt>{c.lastSuccess}</dt><dd>{when(m.last_success)}</dd></div></dl><p className={m.status==='error'||stale?'ww-state warning':'ww-state'}>{stale?c.stale:m.status==='error'?c.failed:m.status==='ready'?c.ready:m.status==='review'?c.review:m.status==='syncing'?c.syncing:m.status==='no_filings'?c.noFilings:c.pending}</p>{m.has_amendments&&<p className="ww-small">{c.review}</p>}</SectionCard>;})}</div><p className="ww-note">{c.institution} {c.older}</p></>}

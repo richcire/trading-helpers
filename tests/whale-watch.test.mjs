@@ -37,3 +37,14 @@ test('reports keep all positions together and separate institutions, periods and
  assert.equal(reports.find(r=>r.manager==='ark'&&r.period===base.period&&r.source===base.source).events.length,1051);
  assert.equal(reports.at(-1).period,'2026-03-31');
 });
+
+test('holding tickers require matching period, issuer and exact security; snapshots remain untouched',async()=>{
+ const {resolveHoldings}=await import('../src/features/whaleWatch/holdings.ts');
+ const row={key:'123456789|COM||SH',cusip:'123456789',ticker:'123456789',issuer:'Example',shares:25};
+ const event={event_key:'accession:'+row.key,period:'2026-06-30',issuer:'Example',cusip:row.cusip,ticker:'EX'};
+ assert.equal(resolveHoldings([row],[event],'2026-06-30')[0].ticker,'EX');
+ for(const changed of [{period:'2026-03-31'},{issuer:'Different'},{event_key:'accession:123456789|ADR||SH'}])assert.equal(resolveHoldings([row],[{...event,...changed}],'2026-06-30')[0].ticker,row.cusip);
+ assert.equal(resolveHoldings([row],[event,{...event,ticker:'OTHER'}],'2026-06-30')[0].ticker,row.cusip);
+ assert.equal(row.ticker,row.cusip);
+ assert.equal(resolveHoldings([row],[],'2026-06-30')[0].shares,25);
+});

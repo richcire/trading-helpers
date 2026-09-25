@@ -1,5 +1,13 @@
 export const copy={
   "ko": {
+    "allHoldings": "전체 보유",
+    "holdingChanges": "보유 변화",
+    "holdingsNote": "보고 기준일 당시 보유 현황이며 실시간 잔고가 아닙니다. 상단 필터와 관계없이 이 보고서의 전체 보유를 표시합니다.",
+    "quantityHeld": "보유 수량",
+    "noHoldings": "보유 내역이 없습니다.",
+    "debt": "채권 · 원금",
+    "positionsShown": "표시 항목",
+
     "reports": "기관별 보고서",
     "reportHint": "보고서를 펼쳐 종목별 보유 변화를 확인하세요.",
     "reportCount": "표시된 보유 변화",
@@ -61,6 +69,14 @@ export const copy={
     "investors": "투자자 목록"
   },
   "en": {
+    "allHoldings": "All holdings",
+    "holdingChanges": "Holding changes",
+    "holdingsNote": "Holdings as of the report date, not a live portfolio. This tab shows the entire filing regardless of the filters above.",
+    "quantityHeld": "Quantity held",
+    "noHoldings": "No holdings in this report.",
+    "debt": "Debt · principal",
+    "positionsShown": "Positions shown",
+
     "reports": "Institution reports",
     "reportHint": "Open a report to explore changes in individual holdings.",
     "reportCount": "Matching holding changes",
@@ -122,6 +138,14 @@ export const copy={
     "investors": "Investors"
   },
   "ja": {
+    "allHoldings": "全保有銘柄",
+    "holdingChanges": "保有変動",
+    "holdingsNote": "報告基準日時点の保有状況です。リアルタイムの残高ではありません。上の検索条件に関係なく、この報告の全保有銘柄を表示します。",
+    "quantityHeld": "保有数量",
+    "noHoldings": "保有銘柄がありません。",
+    "debt": "債券・元本",
+    "positionsShown": "表示件数",
+
     "reports": "機関別レポート",
     "reportHint": "レポートを開くと銘柄ごとの保有変動を確認できます。",
     "reportCount": "該当する保有変動",

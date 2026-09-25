@@ -1,4 +1,5 @@
-import type {Filters,Manager,WhaleEvent} from './types';
+import {resolveHoldings} from './holdings';
+import type {Filters,Manager,WhaleEvent,Filing} from './types';
 // This is intentionally a PUBLIC client key. RLS allows SELECT only on public filing data.
 const endpoint='https://vcyzxlrhdirpllmcltrn.supabase.co/rest/v1/';
 const key='sb_publishable_cCNInfs8EtJKfusiQwxrvg_WOLlPnd9';
@@ -24,4 +25,10 @@ export async function getFeed(filters:Filters,signal?:AbortSignal){
   query.id=`lt.${page[page.length-1].id}`;
  }
 
+}
+
+export async function getReportHoldings(manager:string,period:string,source:string,signal:AbortSignal){
+ const [filings,events]=await Promise.all([read<Filing[]>('ww_filings',{select:'accession,manager_id,period,filed,source,holdings',manager_id:`eq.${manager}`,period:`eq.${period}`,source:`eq.${source}`,limit:'1'},signal),getFeed({manager:'',search:'',action:'',option:''},signal)]);
+ if(!filings[0])throw new Error('FILING_NOT_FOUND');
+ return resolveHoldings(filings[0].holdings,events,period);
 }
