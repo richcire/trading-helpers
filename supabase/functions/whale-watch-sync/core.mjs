@@ -1,7 +1,7 @@
 import { XMLParser, XMLValidator } from 'npm:fast-xml-parser@5.11.1';
 
 // Only these curated identifiers receive tickers; unknown CUSIPs remain visible.
-const symbols={'69608A108':'PLTR','67066G104':'NVDA','037833100':'AAPL','060505104':'BAC','02079K305':'GOOGL','02079K107':'GOOG','023135106':'AMZN','594918104':'MSFT','88160R101':'TSLA','191216100':'KO','025816109':'AXP','674599105':'OXY'};
+const symbols={'29273V100':'ET','55336V100':'MPLX','69608A108':'PLTR','67066G104':'NVDA','037833100':'AAPL','060505104':'BAC','02079K305':'GOOGL','02079K107':'GOOG','023135106':'AMZN','594918104':'MSFT','88160R101':'TSLA','191216100':'KO','025816109':'AXP','674599105':'OXY'};
 export function parseHoldings(xml) {
   if(typeof xml!=='string'||xml.length>20_000_000||/<!DOCTYPE|<!ENTITY/i.test(xml)) throw new Error('지원하지 않는 XML입니다.');
   if(XMLValidator.validate(xml)!==true) throw new Error('올바른 XML 공시가 아닙니다.');
