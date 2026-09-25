@@ -9,8 +9,9 @@ async function read<T>(table:string,query:Record<string,string>,signal?:AbortSig
  return response.json();
 }
 export const getManagers=()=>read<Manager[]>('ww_managers',{select:'id,cik,name_ko,name_en,name_ja,firm,last_attempt,last_success,latest_period,status,error_code,has_amendments',order:'slot.asc'});
-export async function getFeed(filters:Filters,signal?:AbortSignal){
+export async function getFeed(filters:Filters,signal?:AbortSignal,accession?:string){
  const query:Record<string,string>={select:'*',order:'id.desc',limit:'1000'};
+ if(accession)query.accession=`eq.${accession}`;
  if(filters.manager)query.manager_id=`eq.${filters.manager}`;
  if(filters.action)query.action=`eq.${filters.action}`;
  if(filters.option)query.option=`eq.${filters.option==='STOCK'?'':filters.option}`;
@@ -31,4 +32,9 @@ export async function getReportHoldings(manager:string,period:string,source:stri
  const [filings,events]=await Promise.all([read<Filing[]>('ww_filings',{select:'accession,manager_id,period,filed,source,holdings',manager_id:`eq.${manager}`,period:`eq.${period}`,source:`eq.${source}`,limit:'1'},signal),getFeed({manager:'',search:'',action:'',option:''},signal)]);
  if(!filings[0])throw new Error('FILING_NOT_FOUND');
  return resolveHoldings(filings[0].holdings,events,period);
+}
+
+export async function getFiling(accession:string,signal:AbortSignal){
+ const rows=await read<Omit<Filing,'holdings'>[]>('ww_filings',{select:'accession,manager_id,period,filed,source',accession:`eq.${accession}`,limit:'1'},signal);
+ return rows[0]||null;
 }

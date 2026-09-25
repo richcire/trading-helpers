@@ -1,18 +1,10 @@
 import {useEffect,useState} from 'react';
-import type {ReactNode} from 'react';
 import {useI18n} from '../../i18n';
 import {copy} from './copy';
 import {getReportHoldings} from './api';
 import type {Holding} from './types';
 
-export function ReportContents({manager,period,source,children}:{manager:string;period:string;source:string;children:ReactNode}){
- const {language,locale}=useI18n();const c=copy[language];
- const [view,setView]=useState('changes');
- return <><div className="ww-tabs ww-holdings-tabs" role="group" aria-label={c.reports}>
- {['changes','holdings'].map(value=><button key={value} aria-pressed={view===value} className={view===value?'active':''} onClick={()=>setView(value)}>{value==='changes'?c.holdingChanges:c.allHoldings}</button>)}
- </div>{view==='changes'?children:<Holdings key={manager+period+source} manager={manager} period={period} source={source} locale={locale}/>}</>;
-}
-function Holdings({manager,period,source,locale}:{manager:string;period:string;source:string;locale:string}){
+export function Holdings({manager,period,source,locale}:{manager:string;period:string;source:string;locale:string}){
  const {language}=useI18n();const c=copy[language];
  const [rows,setRows]=useState<Holding[]|null>(null),[error,setError]=useState(false),[retry,setRetry]=useState(0);
  const [search,setSearch]=useState(''),[asset,setAsset]=useState(''),[limit,setLimit]=useState(50);

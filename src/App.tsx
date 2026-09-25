@@ -19,6 +19,7 @@ import { DcaPage } from "./features/dca/DcaPage";
 import { DocsPage } from "./features/docs/DocsPage";
 import { ExpectancyPage } from "./features/expectancy/ExpectancyPage";
 import { SimulatorPage } from "./features/simulator/SimulatorPage";
+import { ReportDetailPage } from "./features/whaleWatch/ReportDetailPage";
 import { WhaleWatchPage } from "./features/whaleWatch/WhaleWatchPage";
 import { SizingPage } from "./features/sizing/SizingPage";
 import { useI18n } from "./i18n";
@@ -144,7 +145,7 @@ export default function App() {
 
   const currentRoute = useMemo(() => {
     return (
-      appRoutes.find((route) => route.path === location.pathname) ??
+      appRoutes.find((route) => route.path === location.pathname || (route.id === "whaleWatch" && location.pathname.startsWith("/whale-watch/reports/"))) ??
       appRoutes[0]
     );
   }, [appRoutes, location.pathname]);
@@ -231,6 +232,7 @@ export default function App() {
               path={route.path}
             />
           ))}
+          <Route element={<ReportDetailPage />} path="/whale-watch/reports/:accession/:section" />
           <Route element={<Navigate replace to="/avg-price" />} path="*" />
         </Routes>
       </main>

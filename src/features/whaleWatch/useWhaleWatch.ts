@@ -19,7 +19,6 @@ export function useWhaleWatch(){
  },[selectedView,setSearchParams]);
  const [filters,setFilters]=useState<Filters>(emptyFilters);
  const [loading,setLoading]=useState(true),[error,setError]=useState(false);
- const [detail,setDetail]=useState<WhaleEvent|null>(null);
  const busy=useRef(false),request=useRef<AbortController|null>(null);
  // Remove settings from the retired browser-only follow and alert features.
  useEffect(()=>{try{localStorage.removeItem('trading-whale-watch-v1');}catch{/* Storage may be disabled. */}},[]);
@@ -43,5 +42,5 @@ export function useWhaleWatch(){
   const timer=setInterval(update,5*60*1000);document.addEventListener('visibilitychange',update);
   return()=>{clearInterval(timer);document.removeEventListener('visibilitychange',update);};
  },[check]);
- return {checkedAt,managers,events,tab,setTab,filters,setFilters,loading,error,detail,setDetail,loadFeed,check};
+ return {checkedAt,managers,events,tab,setTab,filters,setFilters,loading,error,loadFeed,check};
 }

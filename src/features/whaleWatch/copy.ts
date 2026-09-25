@@ -1,15 +1,19 @@
 export const copy={
   "ko": {
+    "viewReport": "보고서 보기",
+    "backReports": "보고서 목록",
+    "reportMissing": "보고서를 찾을 수 없습니다.",
+
     "allHoldings": "전체 보유",
     "holdingChanges": "보유 변화",
-    "holdingsNote": "보고 기준일 당시 보유 현황이며 실시간 잔고가 아닙니다. 상단 필터와 관계없이 이 보고서의 전체 보유를 표시합니다.",
+    "holdingsNote": "보고 기준일 당시 보유 현황이며 실시간 잔고가 아닙니다. 이 보고서의 전체 보유 내역을 표시합니다.",
     "quantityHeld": "보유 수량",
     "noHoldings": "보유 내역이 없습니다.",
     "debt": "채권 · 원금",
     "positionsShown": "표시 항목",
 
     "reports": "기관별 보고서",
-    "reportHint": "보고서를 펼쳐 종목별 보유 변화를 확인하세요.",
+    "reportHint": "보고서를 선택해 보유 변화와 전체 보유 현황을 확인하세요.",
     "reportCount": "표시된 보유 변화",
     "expand": "보유 변화 보기",
     "collapse": "접기",
@@ -69,16 +73,20 @@ export const copy={
     "investors": "투자자 목록"
   },
   "en": {
+    "viewReport": "View report",
+    "backReports": "All reports",
+    "reportMissing": "Report not found.",
+
     "allHoldings": "All holdings",
     "holdingChanges": "Holding changes",
-    "holdingsNote": "Holdings as of the report date, not a live portfolio. This tab shows the entire filing regardless of the filters above.",
+    "holdingsNote": "Holdings as of the report date, not a live portfolio. This page shows the entire filing.",
     "quantityHeld": "Quantity held",
     "noHoldings": "No holdings in this report.",
     "debt": "Debt · principal",
     "positionsShown": "Positions shown",
 
     "reports": "Institution reports",
-    "reportHint": "Open a report to explore changes in individual holdings.",
+    "reportHint": "Select a report to view holding changes or all reported holdings.",
     "reportCount": "Matching holding changes",
     "expand": "View holding changes",
     "collapse": "Collapse",
@@ -138,9 +146,13 @@ export const copy={
     "investors": "Investors"
   },
   "ja": {
+    "viewReport": "レポートを見る",
+    "backReports": "レポート一覧",
+    "reportMissing": "レポートが見つかりません。",
+
     "allHoldings": "全保有銘柄",
     "holdingChanges": "保有変動",
-    "holdingsNote": "報告基準日時点の保有状況です。リアルタイムの残高ではありません。上の検索条件に関係なく、この報告の全保有銘柄を表示します。",
+    "holdingsNote": "報告基準日時点の保有状況です。リアルタイムの残高ではありません。この報告の全保有銘柄を表示します。",
     "quantityHeld": "保有数量",
     "noHoldings": "保有銘柄がありません。",
     "debt": "債券・元本",
