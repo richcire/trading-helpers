@@ -4,6 +4,7 @@ import {SectionCard} from '../../components/ui/SectionCard';
 import {useI18n} from '../../i18n';
 import {copy} from './copy';
 import {getFeed,getFiling,getManagers,getFilingHistory} from './api';
+import {AllocationComparison} from './AllocationComparison';
 import {Holdings} from './ReportContents';
 import type {Filing,Manager,WhaleEvent} from './types';
 import './whale.css';
@@ -36,7 +37,8 @@ function ReportDetail({accession,section}:{accession:string;section:string}){
  const badges=(e:WhaleEvent)=><><span className={`ww-badge ${e.action}`}>{actionLabel(e.action)}</span>{e.option&&<span className="ww-badge option">{e.option==='PUT'?c.put:c.call}</span>}{e.review_required&&<span className="ww-badge review">{c.review}</span>}</>;
  const eventRow=(e:WhaleEvent)=><button key={e.id} className="ww-event ww-report-event" onClick={()=>setDetail(e)}><div className="ww-security"><div><strong>{e.ticker}</strong>{badges(e)}</div><small>{e.ticker===e.cusip?'CUSIP · ':''}{e.issuer}</small></div><div className={`ww-change ${e.action}`}><strong>{e.change_pct===null?'NEW':`${e.change_pct>0?'+':''}${fmt(e.change_pct)}%`}</strong><small>{e.period}<br/>{c.period}</small></div><span aria-hidden="true">↗</span></button>;
  const previousPeriod=filing?new Date(Date.UTC(Number(filing.period.slice(0,4)),Number(filing.period.slice(5,7))-3,0)).toISOString().slice(0,10):'';
- const hasPrevious=history.some(f=>f.period===previousPeriod);
+ const previousFiling=history.find(f=>f.period===previousPeriod);
+ const hasPrevious=!!previousFiling;
  const base=`/whale-watch/reports/${encodeURIComponent(accession)}`;
  const needle=search.trim().toLowerCase();
  const filtered=events.filter(e=>(!action||e.action===action)&&(!needle||[e.ticker,e.issuer,e.cusip].some(value=>value.toLowerCase().includes(needle))));
@@ -47,6 +49,7 @@ function ReportDetail({accession,section}:{accession:string;section:string}){
  <nav className="ww-tabs ww-page-tabs" aria-label={c.reports}><Link to={`${base}/changes`} aria-current={section==='changes'?'page':undefined}>{c.holdingChanges}</Link><Link to={`${base}/holdings`} aria-current={section==='holdings'?'page':undefined}>{c.allHoldings}</Link></nav>
  <SectionCard title={section==='holdings'?c.allHoldings:c.holdingChanges}>
  {section==='holdings'?<Holdings manager={filing.manager_id} period={filing.period} source={filing.source} locale={locale}/>:<>
+ {previousFiling&&<AllocationComparison key={filing.accession+previousFiling.accession} previous={previousFiling} current={filing} events={events}/>}
  <p className="ww-note">{c.timing}</p>
  {!events.length&&!hasPrevious&&<p className="ww-warning">{c.noComparison} <Link to={`${base}/holdings`}>{c.allHoldings} →</Link></p>}
  {(events.length>0||hasPrevious)&&<div className="ww-report-summary">{(['new','increased','reduced','closed'] as const).map(a=><span key={a} className={`ww-badge ${a}`}>{c[a]} {fmt(events.filter(e=>e.action===a).length)}</span>)}</div>}

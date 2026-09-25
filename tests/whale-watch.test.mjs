@@ -79,3 +79,14 @@ test('historical filings remain visible without changes and sort by holdings dat
  assert.deepEqual(reports.map(r=>r.accession),['new','old']);
  assert.equal(reports[1].events.length,0);
 });
+
+test('weight comparison uses each period denominator and includes entries and exits',async()=>{
+ const {compareAllocation}=await import('../src/features/whaleWatch/compareWeights.ts');
+ const holding=(key,value,shares=1)=>({key:key+'|COM||SH',ticker:key,cusip:key,issuer:key,option:'',unit:'SH',reported_value:value,shares});
+ const result=compareAllocation([holding('A',60),holding('B',40)],[holding('A',20),holding('C',20)]);
+ assert.equal(result.status,'ready');
+ assert.deepEqual(result.items.map(r=>[r.name,r.previous,r.current,r.delta]),[['C',0,50,50],['B',40,0,-40],['A',60,50,-10]]);
+ assert.equal(compareAllocation([holding('A',null)],[holding('A',20)]).status,'unavailable');
+ assert.equal(compareAllocation([], [holding('A',20)]).status,'unavailable');
+ assert.equal(compareAllocation([holding('A',50),holding('B',50)],[holding('A',75),holding('B',25)]).items.find(r=>r.name==='A').delta,25);
+});

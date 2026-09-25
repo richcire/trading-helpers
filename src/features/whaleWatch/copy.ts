@@ -1,5 +1,11 @@
 export const copy={
   "ko": {
+    "compareWeights": "평가금액 기준 비중 비교",
+    "compareWeightsNote": "직전·현재 보유 기준일의 현물 비중을 비교합니다. 비중 변화가 큰 순서이며, 주가 변화도 반영됩니다. 옵션·채권·현금은 제외합니다. 아래 수량 변화 목록과 기준이 다릅니다.",
+    "weightsUnavailable": "양쪽 보고서의 현물 평가금액이 모두 있어야 비중을 비교할 수 있습니다.",
+    "commonScale": "공통 눈금",
+    "weightDelta": "비중 변화",
+
     "asOfNote": "선택한 날짜 당시의 보유 현황입니다.",
     "noComparison": "직전 분기 자료가 없어 보유 변화를 비교할 수 없습니다. 전체 보유 현황은 확인할 수 있습니다.",
     "noChanges": "직전 분기 대비 보유 수량 변화가 없습니다.",
@@ -84,6 +90,12 @@ export const copy={
     "investors": "투자자 목록"
   },
   "en": {
+    "compareWeights": "Portfolio weight comparison",
+    "compareWeightsNote": "Reported equity weights at the previous and current holdings dates, ranked by absolute change. Price movements also affect weights. Options, debt and cash are excluded. The list below compares quantities.",
+    "weightsUnavailable": "Complete equity values in both reports are required to compare weights.",
+    "commonScale": "Shared scale",
+    "weightDelta": "Weight change",
+
     "asOfNote": "Holdings as of the selected date.",
     "noComparison": "The preceding quarter is not available for comparison. You can still view all holdings.",
     "noChanges": "No quantity changes from the preceding quarter.",
@@ -168,6 +180,12 @@ export const copy={
     "investors": "Investors"
   },
   "ja": {
+    "compareWeights": "評価額ベースの比率比較",
+    "compareWeightsNote": "前回と今回の保有基準日の現物比率を変化の大きい順に表示します。株価変動も反映されます。オプション・債券・現金は除外。下の一覧は数量の変化です。",
+    "weightsUnavailable": "両方の報告の現物評価額が揃うと比較できます。",
+    "commonScale": "共通目盛",
+    "weightDelta": "比率変化",
+
     "asOfNote": "選択した日付時点の保有状況です。",
     "noComparison": "前四半期の資料がないため比較できません。全保有銘柄は確認できます。",
     "noChanges": "前四半期から保有数量の変動はありません。",
