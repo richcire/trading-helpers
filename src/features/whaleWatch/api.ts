@@ -38,3 +38,12 @@ export async function getFiling(accession:string,signal:AbortSignal){
  const rows=await read<Omit<Filing,'holdings'>[]>('ww_filings',{select:'accession,manager_id,period,filed,source',accession:`eq.${accession}`,limit:'1'},signal);
  return rows[0]||null;
 }
+
+export async function getFilingHistory(signal?:AbortSignal,manager?:string){
+ const result:Omit<Filing,'holdings'>[]=[];
+ for(let offset=0;;offset+=1000){
+  const query:Record<string,string>={select:'accession,manager_id,period,filed,source',order:'period.desc,filed.desc,accession.desc',limit:'1000',offset:String(offset)};
+  if(manager)query.manager_id=`eq.${manager}`;
+  const page=await read<Omit<Filing,'holdings'>[]>('ww_filings',query,signal);result.push(...page);if(page.length<1000)return result;
+ }
+}

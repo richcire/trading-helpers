@@ -72,3 +72,10 @@ test('allocation uses complete equity values, excludes derivatives, and retains 
  assert.equal(allocation([{...rows[0],reported_value:null}]).status,'missing');
  assert.equal(allocation([{...rows[0],reported_value:0}]).status,'empty');
 });
+
+test('historical filings remain visible without changes and sort by holdings date before submission date',async()=>{
+ const {groupReports}=await import('../src/features/whaleWatch/reports.ts');
+ const reports=groupReports([], [{accession:'old',manager_id:'ark',period:'2026-03-31',filed:'2026-09-01',source:'old'},{accession:'new',manager_id:'ark',period:'2026-06-30',filed:'2026-08-14',source:'new'}]);
+ assert.deepEqual(reports.map(r=>r.accession),['new','old']);
+ assert.equal(reports[1].events.length,0);
+});

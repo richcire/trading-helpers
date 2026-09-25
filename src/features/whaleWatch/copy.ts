@@ -1,5 +1,9 @@
 export const copy={
   "ko": {
+    "asOfNote": "선택한 날짜 당시의 보유 현황입니다.",
+    "noComparison": "직전 분기 자료가 없어 보유 변화를 비교할 수 없습니다. 전체 보유 현황은 확인할 수 있습니다.",
+    "noChanges": "직전 분기 대비 보유 수량 변화가 없습니다.",
+
     "allocation": "종목별 보유 비중",
     "allocationNote": "공시 평가금액 기준 · 주식·ETF 등 현물만 포함하며 옵션·채권·현금은 제외합니다. 모든 종목을 개별 표시합니다. 아래 검색과 관계없이 전체 현물 기준입니다.",
     "other": "기타",
@@ -13,7 +17,7 @@ export const copy={
 
     "allHoldings": "전체 보유",
     "holdingChanges": "보유 변화",
-    "holdingsNote": "보고 기준일 당시 보유 현황이며 실시간 잔고가 아닙니다. 이 보고서의 전체 보유 내역을 표시합니다.",
+    "holdingsNote": "보유 기준일 당시 보유 현황이며 실시간 잔고가 아닙니다. 이 보고서의 전체 보유 내역을 표시합니다.",
     "quantityHeld": "보유 수량",
     "noHoldings": "보유 내역이 없습니다.",
     "debt": "채권 · 원금",
@@ -52,7 +56,7 @@ export const copy={
     "timing": "공시 공개 후의 보유 변화입니다. 13F는 통상 분기 말 이후 45일 이내 제출되며, 실제 거래일·가격은 확인되지 않습니다.",
     "interpretation": "풋옵션 보유가 곧 공매도라는 뜻은 아닙니다. 주식 분할·이관 등도 수량을 바꿀 수 있습니다.",
     "filingDate": "공시일",
-    "period": "보고 기준일",
+    "period": "보유 기준일",
     "previous": "이전 보고",
     "current": "이번 보고",
     "unknownTrade": "실제 거래일·가격: 공시에서 확인 불가",
@@ -76,10 +80,14 @@ export const copy={
     "close": "닫기",
     "history": "첫 수집 자료",
     "institution": "인물 이름은 운용사를 찾기 위한 표시이며 개인 계좌나 현재 운용 참여 여부를 의미하지 않습니다.",
-    "older": "공시가 새로 제출되지 않으면 이전 보고 기준일이 그대로 표시됩니다.",
+    "older": "공시가 새로 제출되지 않으면 이전 보유 기준일이 그대로 표시됩니다.",
     "investors": "투자자 목록"
   },
   "en": {
+    "asOfNote": "Holdings as of the selected date.",
+    "noComparison": "The preceding quarter is not available for comparison. You can still view all holdings.",
+    "noChanges": "No quantity changes from the preceding quarter.",
+
     "allocation": "Holdings allocation",
     "allocationNote": "Based on reported values of equities and ETFs. Options, debt and cash are excluded. Every position is shown individually, unaffected by the search below.",
     "other": "Other",
@@ -132,7 +140,7 @@ export const copy={
     "timing": "Changes reflect published filings. Form 13F is generally due within 45 days of quarter end; trade dates and execution prices are unknown.",
     "interpretation": "A put holding does not prove a short sale. Splits and transfers can also change reported quantities.",
     "filingDate": "Filed",
-    "period": "Report date",
+    "period": "Holdings as of",
     "previous": "Previous report",
     "current": "Current report",
     "unknownTrade": "Trade date and execution price: not disclosed",
@@ -160,6 +168,10 @@ export const copy={
     "investors": "Investors"
   },
   "ja": {
+    "asOfNote": "選択した日付時点の保有状況です。",
+    "noComparison": "前四半期の資料がないため比較できません。全保有銘柄は確認できます。",
+    "noChanges": "前四半期から保有数量の変動はありません。",
+
     "allocation": "銘柄別保有比率",
     "allocationNote": "開示評価額に基づく株式・ETF等の現物の比率です。オプション・債券・現金は除外。すべての銘柄を個別に表示します。下の検索条件には影響されません。",
     "other": "その他",
@@ -173,7 +185,7 @@ export const copy={
 
     "allHoldings": "全保有銘柄",
     "holdingChanges": "保有変動",
-    "holdingsNote": "報告基準日時点の保有状況です。リアルタイムの残高ではありません。この報告の全保有銘柄を表示します。",
+    "holdingsNote": "保有基準日時点の保有状況です。リアルタイムの残高ではありません。この報告の全保有銘柄を表示します。",
     "quantityHeld": "保有数量",
     "noHoldings": "保有銘柄がありません。",
     "debt": "債券・元本",
@@ -212,7 +224,7 @@ export const copy={
     "timing": "公開後の保有変動です。13Fは通常四半期末から45日以内に提出され、実際の取引日・価格は不明です。",
     "interpretation": "プット保有は空売りの証明ではありません。株式分割や移管でも数量が変わります。",
     "filingDate": "提出日",
-    "period": "報告基準日",
+    "period": "保有基準日",
     "previous": "前回報告",
     "current": "今回報告",
     "unknownTrade": "実際の取引日・価格：開示から確認不可",
@@ -236,7 +248,7 @@ export const copy={
     "close": "閉じる",
     "history": "初回収集履歴",
     "institution": "個人名は報告機関の識別用です。個人口座や現在の運用参加を示すものではありません。",
-    "older": "新しい開示が提出されるまで報告基準日は変わりません。",
+    "older": "新しい開示が提出されるまで保有基準日は変わりません。",
     "investors": "投資家一覧"
   }
 };

@@ -8,9 +8,9 @@ import {groupReports} from './reports';
 
 export function WhaleWatchPage(){
  const {language,locale}=useI18n();const c=copy[language];
- const {checkedAt,managers,events,tab,setTab,filters,setFilters,loading,error,loadFeed,check}=useWhaleWatch();
- const reports=groupReports(events);
+ const {checkedAt,managers,events,filings,tab,setTab,filters,setFilters,loading,error,loadFeed,check}=useWhaleWatch();
  const filtered=!!(filters.search.trim()||filters.action||filters.option);
+ const reports=groupReports(events,filtered?[]:filings);
  const name=(id:string)=>{const m=managers.find(m=>m.id===id);return m?.[`name_${language}`]||id;};
  const fmt=(n:number)=>new Intl.NumberFormat(locale,{maximumFractionDigits:2}).format(n);
  const when=(s:string|null)=>s?new Date(s).toLocaleString(locale,{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}):c.never;
@@ -27,11 +27,11 @@ export function WhaleWatchPage(){
    <div className="ww-filters"><input aria-label={c.search} placeholder={c.search} value={filters.search} onChange={e=>setFilters(f=>({...f,search:e.target.value}))}/><select aria-label={c.name} value={filters.manager} onChange={e=>setFilters(f=>({...f,manager:e.target.value}))}>{investorOptions}</select><select aria-label={c.asset} value={filters.option} onChange={e=>setFilters(f=>({...f,option:e.target.value}))}>{assetOptions}</select></div>
    <div className="ww-filters secondary"><select aria-label={c.action} value={filters.action} onChange={e=>setFilters(f=>({...f,action:e.target.value}))}>{actionOptions}</select></div>
    <p className="ww-note">{filtered?c.filteredReports:c.reportHint}</p>
-   <div className="ww-report-list" aria-busy={loading}>{!loading&&reports.map(report=>{const base=`/whale-watch/reports/${encodeURIComponent(report.events[0].event_key.split(':')[0])}`;return <article className="ww-report" key={report.key}>
+   <div className="ww-report-list" aria-busy={loading}>{!loading&&reports.map(report=>{const base=`/whale-watch/reports/${encodeURIComponent(report.accession)}`;return <article className="ww-report" key={report.key}>
     <Link className="ww-report-heading" to={`${base}/changes`}>
      <span className="ww-person"><span className="ww-avatar">{report.manager.slice(0,2).toUpperCase()}</span><span><strong>{name(report.manager)}</strong><small>13F · {c.period} {report.period}</small></span></span>
      <span className="ww-report-date">{c.filingDate}<strong>{report.filed}</strong></span>
-     <span className="ww-report-total"><strong>{fmt(report.events.length)}</strong><small>{c.reportCount}</small></span>
+     <span className="ww-report-total"><strong>{report.events.length?fmt(report.events.length):'—'}</strong><small>{c.reportCount}</small></span>
      <span className="ww-report-toggle">{c.viewReport} →</span>
     </Link>
     <nav className="ww-report-links" aria-label={name(report.manager)}><Link to={`${base}/changes`}>{c.holdingChanges} →</Link><Link to={`${base}/holdings`}>{c.allHoldings} →</Link></nav>

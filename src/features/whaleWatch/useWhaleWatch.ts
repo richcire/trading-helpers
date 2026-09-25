@@ -1,12 +1,13 @@
 import {useCallback,useEffect,useEffectEvent,useRef,useState} from 'react';
 import {useSearchParams} from 'react-router-dom';
-import {getFeed,getManagers} from './api';
-import type {Filters,Manager,WhaleEvent} from './types';
+import {getFeed,getManagers,getFilingHistory} from './api';
+import type {Filters,Manager,WhaleEvent,Filing} from './types';
 
 const emptyFilters:Filters={manager:'',search:'',action:'',option:''};
 export function useWhaleWatch(){
  const [checkedAt,setCheckedAt]=useState(Date.now);
  const [managers,setManagers]=useState<Manager[]>([]);
+ const [filings,setFilings]=useState<Omit<Filing,'holdings'>[]>([]);
  const [events,setEvents]=useState<WhaleEvent[]>([]);
  const [searchParams,setSearchParams]=useSearchParams();
  const selectedView=searchParams.get('view');
@@ -24,7 +25,7 @@ export function useWhaleWatch(){
  useEffect(()=>{try{localStorage.removeItem('trading-whale-watch-v1');}catch{/* Storage may be disabled. */}},[]);
  const loadFeed=useCallback(async()=>{
   request.current?.abort();const controller=new AbortController();request.current=controller;setLoading(true);
-  try{const data=await getFeed(filters,controller.signal);if(controller.signal.aborted)return;setEvents(data);setError(false);}
+  try{const [data,history]=await Promise.all([getFeed(filters,controller.signal),getFilingHistory(controller.signal,filters.manager||undefined)]);if(controller.signal.aborted)return;setEvents(data);setFilings(history);setError(false);}
   catch(e){if(!(e instanceof DOMException&&e.name==='AbortError'))setError(true);}
   finally{if(!controller.signal.aborted)setLoading(false);}
  },[filters]);
@@ -42,5 +43,5 @@ export function useWhaleWatch(){
   const timer=setInterval(update,5*60*1000);document.addEventListener('visibilitychange',update);
   return()=>{clearInterval(timer);document.removeEventListener('visibilitychange',update);};
  },[check]);
- return {checkedAt,managers,events,tab,setTab,filters,setFilters,loading,error,loadFeed,check};
+ return {checkedAt,managers,events,filings,tab,setTab,filters,setFilters,loading,error,loadFeed,check};
 }
